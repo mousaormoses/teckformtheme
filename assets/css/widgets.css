@@ -1,0 +1,29 @@
+/* Teckform Elementor widgets. Colors and sizes set in the Style tab override these defaults. */
+
+/* Feature Box */
+.teckform-feature-box__icon {
+	display: inline-block;
+	margin-bottom: 16px;
+	font-size: 40px;
+	line-height: 1;
+	color: #2563eb;
+}
+
+.teckform-feature-box__icon svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.teckform-feature-box__title {
+	margin: 0 0 8px;
+}
+
+.teckform-feature-box__title a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.teckform-feature-box__description {
+	margin: 0;
+}

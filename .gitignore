@@ -1,0 +1,10 @@
+# Never commit site-specific WordPress files into the theme
+wp-config.php
+.htaccess
+*.zip
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
