@@ -1,0 +1,259 @@
+/* Teckform Flip Box widget. Colors and sizes set in the Style tab override these defaults.
+ *
+ * --teckform-flip-on is 0 for the front and 1 for the back. The hover, focus and
+ * tap states only switch that number; each effect turns it into movement. */
+
+.teckform-flip-box {
+	--teckform-flip-on: 0;
+	--teckform-flip-duration: 600ms;
+	--teckform-flip-radius: 16px;
+	position: relative;
+	height: 320px;
+	border-radius: var(--teckform-flip-radius);
+	perspective: 1200px;
+	outline: none;
+}
+
+.teckform-flip-box.is-flipped,
+.teckform-flip-box:focus-visible {
+	--teckform-flip-on: 1;
+}
+
+/* Kept apart: a browser without :has() would drop the whole rule above. */
+.teckform-flip-box:has(:focus-visible) {
+	--teckform-flip-on: 1;
+}
+
+/* Only real mouse hover; on touch screens a tap toggles .is-flipped instead. */
+@media (hover: hover) {
+	.teckform-flip-box:hover {
+		--teckform-flip-on: 1;
+	}
+}
+
+.teckform-flip-box:focus-visible {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: 4px;
+}
+
+.teckform-flip-box__inner {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	transition: transform var(--teckform-flip-duration) cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+.teckform-flip-box__side {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	overflow: hidden;
+	border-radius: var(--teckform-flip-radius);
+	transition: transform var(--teckform-flip-duration) cubic-bezier(0.4, 0.2, 0.2, 1), opacity var(--teckform-flip-duration) ease;
+}
+
+.teckform-flip-box__front {
+	z-index: 1;
+	border: 1px solid var(--teckform-border);
+	background-color: var(--teckform-surface);
+	color: var(--teckform-text);
+}
+
+.teckform-flip-box__back {
+	background-color: var(--teckform-accent);
+	color: var(--teckform-on-accent);
+}
+
+.teckform-flip-box__bg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.teckform-flip-box__overlay {
+	position: absolute;
+	inset: 0;
+	background-color: rgba(15, 23, 42, 0.55);
+}
+
+.teckform-flip-box__content {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 0;
+	padding: 32px;
+	text-align: center;
+}
+
+/* Text on top of a background image is light. */
+.teckform-flip-box__bg ~ .teckform-flip-box__content {
+	color: #fff;
+}
+
+.teckform-flip-box__graphic {
+	margin-bottom: 20px;
+}
+
+.teckform-flip-box__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+	border-radius: 16px;
+	background-color: color-mix(in srgb, var(--teckform-accent) 12%, transparent);
+	color: var(--teckform-accent);
+	font-size: 32px;
+	line-height: 1;
+}
+
+.teckform-flip-box__icon svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.teckform-flip-box__image {
+	display: block;
+	width: 96px;
+	max-width: 100%;
+	height: auto;
+}
+
+.teckform-flip-box__title {
+	margin: 0 0 10px;
+	color: inherit;
+	font-size: 1.375rem;
+	font-weight: 700;
+	line-height: 1.25;
+}
+
+.teckform-flip-box__text {
+	margin: 0;
+	color: inherit;
+	line-height: 1.6;
+	opacity: 0.85;
+}
+
+.teckform-flip-box__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 20px;
+	padding: 12px 22px;
+	border: 1px solid currentColor;
+	border-radius: 10px;
+	color: inherit;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.teckform-flip-box__button:hover,
+.teckform-flip-box__button:focus-visible {
+	border-color: var(--teckform-surface);
+	background-color: var(--teckform-surface);
+	color: var(--teckform-text);
+}
+
+.teckform-flip-box__button:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+/* Effect: 3D flip. The back starts turned around and the whole card rotates. */
+.teckform-flip-box--flip .teckform-flip-box__inner {
+	transform-style: preserve-3d;
+}
+
+.teckform-flip-box--flip .teckform-flip-box__side {
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+}
+
+.teckform-flip-box--flip.teckform-flip-box--left .teckform-flip-box__back,
+.teckform-flip-box--flip.teckform-flip-box--right .teckform-flip-box__back {
+	transform: rotateY(180deg);
+}
+
+.teckform-flip-box--flip.teckform-flip-box--up .teckform-flip-box__back,
+.teckform-flip-box--flip.teckform-flip-box--down .teckform-flip-box__back {
+	transform: rotateX(180deg);
+}
+
+.teckform-flip-box--flip.teckform-flip-box--left .teckform-flip-box__inner {
+	transform: rotateY(calc(var(--teckform-flip-on) * -180deg));
+}
+
+.teckform-flip-box--flip.teckform-flip-box--right .teckform-flip-box__inner {
+	transform: rotateY(calc(var(--teckform-flip-on) * 180deg));
+}
+
+.teckform-flip-box--flip.teckform-flip-box--up .teckform-flip-box__inner {
+	transform: rotateX(calc(var(--teckform-flip-on) * 180deg));
+}
+
+.teckform-flip-box--flip.teckform-flip-box--down .teckform-flip-box__inner {
+	transform: rotateX(calc(var(--teckform-flip-on) * -180deg));
+}
+
+/* Effect: slide. The back pushes the front out in the chosen direction. */
+.teckform-flip-box--slide {
+	overflow: hidden;
+}
+
+.teckform-flip-box--slide.teckform-flip-box--left .teckform-flip-box__front {
+	transform: translateX(calc(var(--teckform-flip-on) * -100%));
+}
+
+.teckform-flip-box--slide.teckform-flip-box--left .teckform-flip-box__back {
+	transform: translateX(calc((1 - var(--teckform-flip-on)) * 100%));
+}
+
+.teckform-flip-box--slide.teckform-flip-box--right .teckform-flip-box__front {
+	transform: translateX(calc(var(--teckform-flip-on) * 100%));
+}
+
+.teckform-flip-box--slide.teckform-flip-box--right .teckform-flip-box__back {
+	transform: translateX(calc((1 - var(--teckform-flip-on)) * -100%));
+}
+
+.teckform-flip-box--slide.teckform-flip-box--up .teckform-flip-box__front {
+	transform: translateY(calc(var(--teckform-flip-on) * -100%));
+}
+
+.teckform-flip-box--slide.teckform-flip-box--up .teckform-flip-box__back {
+	transform: translateY(calc((1 - var(--teckform-flip-on)) * 100%));
+}
+
+.teckform-flip-box--slide.teckform-flip-box--down .teckform-flip-box__front {
+	transform: translateY(calc(var(--teckform-flip-on) * 100%));
+}
+
+.teckform-flip-box--slide.teckform-flip-box--down .teckform-flip-box__back {
+	transform: translateY(calc((1 - var(--teckform-flip-on)) * -100%));
+}
+
+/* Effect: fade. The back sits under the front until it's shown, so it can't be clicked while hidden. */
+.teckform-flip-box--fade .teckform-flip-box__front {
+	opacity: calc(1 - var(--teckform-flip-on));
+}
+
+.teckform-flip-box--fade .teckform-flip-box__back {
+	z-index: calc(var(--teckform-flip-on) * 2);
+	opacity: var(--teckform-flip-on);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-flip-box__inner,
+	.teckform-flip-box__side,
+	.teckform-flip-box__button {
+		transition: none !important;
+	}
+}

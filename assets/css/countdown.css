@@ -1,0 +1,139 @@
+/* Teckform Countdown widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-countdown {
+	--teckform-countdown-justify: center;
+	color: var(--teckform-text);
+	text-align: center;
+}
+
+.teckform-countdown__units {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	justify-content: var(--teckform-countdown-justify);
+	gap: 16px;
+}
+
+.teckform-countdown__units[hidden] {
+	display: none;
+}
+
+.teckform-countdown__unit {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+/* Numbers keep the same width as they change. */
+.teckform-countdown__number {
+	display: block;
+	min-width: 2ch;
+	color: var(--teckform-text);
+	font-size: 2.75rem;
+	font-weight: 700;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+	text-align: center;
+}
+
+.teckform-countdown__label {
+	color: var(--teckform-muted);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	line-height: 1.2;
+	text-transform: uppercase;
+}
+
+.teckform-countdown__separator {
+	align-self: center;
+	color: var(--teckform-muted);
+	font-size: 2rem;
+	font-weight: 700;
+	line-height: 1;
+}
+
+/* Boxes */
+.teckform-countdown--boxes .teckform-countdown__unit {
+	min-width: 96px;
+	padding: 20px 14px;
+	border: 1px solid var(--teckform-border);
+	border-radius: 14px;
+	background: var(--teckform-surface);
+}
+
+/* Inline: number and label on one line, e.g. 02 days 14 hours. */
+.teckform-countdown--inline .teckform-countdown__units {
+	align-items: baseline;
+	gap: 6px 14px;
+}
+
+.teckform-countdown--inline .teckform-countdown__unit {
+	flex-direction: row;
+	align-items: baseline;
+	gap: 4px;
+}
+
+.teckform-countdown--inline .teckform-countdown__number {
+	font-size: 1.5rem;
+}
+
+.teckform-countdown--inline .teckform-countdown__label {
+	font-size: 0.875rem;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.teckform-countdown--inline .teckform-countdown__separator {
+	align-self: baseline;
+	font-size: 1.5rem;
+}
+
+/* Finished message */
+.teckform-countdown__message {
+	color: var(--teckform-text);
+	font-size: 1.125rem;
+	font-weight: 600;
+	line-height: 1.6;
+}
+
+.teckform-countdown__message[hidden] {
+	display: none;
+}
+
+.teckform-countdown__editor-note {
+	margin: 12px 0 0;
+	color: var(--teckform-muted);
+	font-size: 0.8125rem;
+	font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-countdown *,
+	.teckform-countdown *::before,
+	.teckform-countdown *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+@media (max-width: 767px) {
+	.teckform-countdown__units {
+		gap: 10px;
+	}
+
+	.teckform-countdown--boxes .teckform-countdown__unit {
+		min-width: 72px;
+		padding: 14px 8px;
+	}
+
+	.teckform-countdown__number {
+		font-size: 2rem;
+	}
+
+	.teckform-countdown__label {
+		font-size: 0.6875rem;
+	}
+}

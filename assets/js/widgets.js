@@ -57,6 +57,53 @@
 		}
 	}
 
+	// Line a mega menu up with the header content, the screen, or center it under its item.
+	function positionMega( item ) {
+		var mega = item.querySelector( '.teckform-nav__mega' );
+
+		if ( ! mega || 'absolute' !== window.getComputedStyle( mega ).position ) {
+			return;
+		}
+
+		var nav = item.closest( '.teckform-nav' );
+		var mode = nav.getAttribute( 'data-mega-width' ) || 'container';
+		var itemRect = item.getBoundingClientRect();
+		var viewport = document.documentElement.clientWidth;
+		var left;
+		var width;
+
+		if ( 'full' === mode ) {
+			left = 0;
+			width = viewport;
+		} else if ( 'container' === mode ) {
+			var box = nav.closest( '.e-con-inner, .elementor-container, .e-con, .teckform-header' ) || nav;
+			var boxRect = box.getBoundingClientRect();
+
+			left = boxRect.left;
+			width = boxRect.width;
+		} else {
+			width = Math.min( mega.offsetWidth, viewport - 32 );
+			left = Math.max( 16, Math.min( itemRect.left + ( itemRect.width - width ) / 2, viewport - width - 16 ) );
+		}
+
+		mega.style.left = Math.round( left - itemRect.left ) + 'px';
+
+		if ( 'custom' !== mode ) {
+			mega.style.width = Math.round( width ) + 'px';
+		}
+	}
+
+	function onMegaHover( event ) {
+		var item = event.target.closest && event.target.closest( '.teckform-has-mega' );
+
+		if ( item ) {
+			positionMega( item );
+		}
+	}
+
+	document.addEventListener( 'mouseover', onMegaHover );
+	document.addEventListener( 'focusin', onMegaHover );
+
 	document.addEventListener( 'click', function ( event ) {
 		var target = event.target;
 		var el;
@@ -75,6 +122,7 @@
 			closeNav( el.closest( '.teckform-nav' ), true );
 		} else if ( ( el = target.closest( '.teckform-nav__sub-toggle' ) ) ) {
 			el.setAttribute( 'aria-expanded', el.parentElement.classList.toggle( 'is-open' ) ? 'true' : 'false' );
+			positionMega( el.parentElement );
 		} else if ( ( el = target.closest( '.teckform-nav.is-open a' ) ) ) {
 			// Links to a section on the same page should not leave the menu open.
 			closeNav( el.closest( '.teckform-nav' ), false );

@@ -1,0 +1,260 @@
+/* Teckform Process / Timeline widget. Colors and sizes set in the Style tab override these defaults.
+   Written mobile first: every layout starts as a vertical timeline and the
+   horizontal and alternating layouts take over from tablet width up. */
+
+.teckform-process {
+	--teckform-process-marker: 48px;
+	--teckform-process-icon-size: 20px;
+	--teckform-process-gap-x: 32px;
+	--teckform-process-gap-y: 40px;
+	--teckform-process-content-gap: 20px;
+	--teckform-process-line-color: var(--teckform-border);
+	--teckform-process-line-style: solid;
+	--teckform-process-line-width: 2px;
+	--teckform-process-line-gap: 10px;
+	display: grid;
+	gap: var(--teckform-process-gap-y) var(--teckform-process-gap-x);
+	margin: 0;
+	padding: 0;
+	color: var(--teckform-text);
+	list-style: none;
+}
+
+.teckform-process--marker-dot {
+	--teckform-process-marker: 18px;
+	--teckform-process-line-gap: 8px;
+}
+
+/* Step: marker column, then the text. */
+.teckform-process__step {
+	position: relative;
+	display: grid;
+	grid-template-columns: var(--teckform-process-marker) minmax(0, 1fr);
+	align-items: start;
+	column-gap: var(--teckform-process-content-gap);
+	margin: 0;
+	padding: 0;
+}
+
+.teckform-process__head {
+	position: relative;
+	z-index: 1;
+}
+
+/* Marker */
+.teckform-process__marker {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--teckform-process-marker);
+	height: var(--teckform-process-marker);
+	border-radius: 50%;
+	background: var(--teckform-accent);
+	box-shadow: 0 0 0 6px color-mix(in srgb, var(--teckform-accent) 14%, transparent);
+	color: var(--teckform-on-accent, #fff);
+	font-size: 1.125rem;
+	font-weight: 700;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+	transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.teckform-process--marker-dot .teckform-process__marker {
+	box-shadow: 0 0 0 4px color-mix(in srgb, var(--teckform-accent) 18%, transparent);
+}
+
+.teckform-process__marker svg {
+	width: var(--teckform-process-icon-size);
+	height: var(--teckform-process-icon-size);
+	fill: currentColor;
+}
+
+.teckform-process__marker i {
+	font-size: var(--teckform-process-icon-size);
+}
+
+/* Text */
+.teckform-process__content {
+	min-width: 0;
+	padding-top: max(0px, calc(var(--teckform-process-marker) / 2 - 0.9em));
+	text-align: start;
+	transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.teckform-process__label {
+	display: inline-block;
+	margin-bottom: 6px;
+	color: var(--teckform-accent);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	line-height: 1.4;
+	text-transform: uppercase;
+}
+
+.teckform-process__title {
+	margin: 0 0 8px;
+	color: var(--teckform-text);
+	font-size: 1.25rem;
+	font-weight: 700;
+	line-height: 1.3;
+	transition: color 0.2s ease;
+}
+
+.teckform-process__text {
+	margin: 0;
+	color: var(--teckform-muted);
+	line-height: 1.7;
+}
+
+/* Line: vertical, from below this marker to above the next one. */
+.teckform-process__line {
+	position: absolute;
+	top: calc(var(--teckform-process-marker) + var(--teckform-process-line-gap));
+	bottom: calc(var(--teckform-process-line-gap) - var(--teckform-process-gap-y));
+	inset-inline-start: calc(var(--teckform-process-marker) / 2 - var(--teckform-process-line-width) / 2);
+	width: 0;
+	height: auto;
+	border: 0 var(--teckform-process-line-style) var(--teckform-process-line-color);
+	border-inline-start-width: var(--teckform-process-line-width);
+	pointer-events: none;
+	transform-origin: center top;
+	transition: transform 0.6s ease;
+}
+
+/* Scroll animation. JS adds .is-observing, so without JS everything stays visible. */
+.teckform-process.is-observing .teckform-process__step {
+	transition: opacity 0.6s ease var(--teckform-process-delay, 0s), transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) var(--teckform-process-delay, 0s);
+}
+
+.teckform-process.is-observing .teckform-process__step:not(.is-visible) {
+	opacity: 0;
+	transform: translateY(24px);
+}
+
+.teckform-process.is-observing .teckform-process__line {
+	transition-delay: calc(var(--teckform-process-delay, 0s) + 0.3s);
+}
+
+.teckform-process.is-observing .teckform-process__step:not(.is-visible) .teckform-process__line {
+	transform: scaleY(0);
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+
+	/* Horizontal steps */
+	.teckform-process--horizontal {
+		grid-auto-columns: minmax(0, 1fr);
+		grid-auto-flow: column;
+	}
+
+	.teckform-process--horizontal .teckform-process__step {
+		display: block;
+	}
+
+	.teckform-process--horizontal .teckform-process__head {
+		display: flex;
+		margin-bottom: var(--teckform-process-content-gap);
+	}
+
+	.teckform-process--horizontal .teckform-process__content {
+		padding-top: 0;
+	}
+
+	.teckform-process--horizontal .teckform-process__line {
+		top: calc(var(--teckform-process-marker) / 2 - var(--teckform-process-line-width) / 2);
+		bottom: auto;
+		inset-inline-start: calc(var(--teckform-process-marker) + var(--teckform-process-line-gap));
+		inset-inline-end: calc(var(--teckform-process-line-gap) - var(--teckform-process-gap-x));
+		width: auto;
+		height: 0;
+		border-inline-start-width: 0;
+		border-top-width: var(--teckform-process-line-width);
+		transform-origin: left center;
+	}
+
+	[dir="rtl"] .teckform-process--horizontal .teckform-process__line {
+		transform-origin: right center;
+	}
+
+	.teckform-process--horizontal.is-observing .teckform-process__step:not(.is-visible) .teckform-process__line {
+		transform: scaleX(0);
+	}
+
+	/* Centered steps: the line runs from the middle of one marker to the next. */
+	.teckform-process--align-center .teckform-process__step {
+		text-align: center;
+	}
+
+	.teckform-process--align-center .teckform-process__head {
+		justify-content: center;
+	}
+
+	.teckform-process--align-center .teckform-process__content {
+		text-align: center;
+	}
+
+	.teckform-process--align-center .teckform-process__text {
+		margin-inline: auto;
+	}
+
+	.teckform-process--align-center .teckform-process__line {
+		inset-inline-start: calc(50% + var(--teckform-process-marker) / 2 + var(--teckform-process-line-gap));
+		inset-inline-end: calc(var(--teckform-process-marker) / 2 + var(--teckform-process-line-gap) - var(--teckform-process-gap-x) - 50%);
+	}
+
+	/* Alternating timeline: line in the middle, steps on both sides. */
+	.teckform-process--alternating .teckform-process__step {
+		grid-template-columns: minmax(0, 1fr) var(--teckform-process-marker) minmax(0, 1fr);
+	}
+
+	.teckform-process--alternating .teckform-process__head {
+		grid-row: 1;
+		grid-column: 2;
+	}
+
+	.teckform-process--alternating .teckform-process__content {
+		grid-row: 1;
+		grid-column: 3;
+	}
+
+	.teckform-process--alternating .teckform-process__step:nth-child(even) .teckform-process__content,
+	.teckform-process--alternating.teckform-process--reverse .teckform-process__step:nth-child(odd) .teckform-process__content {
+		grid-column: 1;
+		text-align: end;
+	}
+
+	.teckform-process--alternating.teckform-process--reverse .teckform-process__step:nth-child(even) .teckform-process__content {
+		grid-column: 3;
+		text-align: start;
+	}
+
+	.teckform-process--alternating .teckform-process__step:nth-child(even) .teckform-process__text,
+	.teckform-process--alternating.teckform-process--reverse .teckform-process__step:nth-child(odd) .teckform-process__text {
+		margin-inline-start: auto;
+	}
+
+	.teckform-process--alternating.teckform-process--reverse .teckform-process__step:nth-child(even) .teckform-process__text {
+		margin-inline-start: 0;
+	}
+
+	.teckform-process--alternating .teckform-process__line {
+		inset-inline-start: calc(50% - var(--teckform-process-line-width) / 2);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-process *,
+	.teckform-process *::before,
+	.teckform-process *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+
+	.teckform-process.is-observing .teckform-process__step:not(.is-visible),
+	.teckform-process.is-observing .teckform-process__step:not(.is-visible) .teckform-process__line {
+		opacity: 1;
+		transform: none;
+	}
+}

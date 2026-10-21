@@ -4,29 +4,37 @@ Theme URI: https://github.com/mousaormoses/teckformtheme
 Author: Moses Aziz
 Author URI: https://github.com/mousaormoses
 Description: A lightweight starter theme built for Elementor. Minimal markup and styles so Elementor layouts render edge to edge.
-Version: 1.3.0
+Version: 1.4.0
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: teckform
-Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, translation-ready
+Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, translation-ready, rtl-language-support, theme-options
 */
 
-/* Colors. Dark mode overrides these (Appearance > Customize > Dark Mode). */
-:root {
+/*
+ * Colors and fonts. Text, heading and accent colors and both fonts follow Elementor's
+ * Global Colors and Global Fonts (Site Settings), so they're set once for the whole site.
+ * They're defined on body because Elementor declares its globals there.
+ * Dark mode overrides them (Appearance > Customize > Dark Mode).
+ */
+body {
 	--teckform-bg: #fff;
-	--teckform-text: #1f2937;
+	--teckform-text: var(--e-global-color-text, #1f2937);
+	--teckform-heading: var(--e-global-color-primary, #111827);
 	--teckform-muted: #6b7280;
 	--teckform-surface: #fff;
 	--teckform-border: #e5e7eb;
-	--teckform-accent: #2563eb;
+	--teckform-accent: var(--e-global-color-accent, #2563eb);
 	--teckform-on-accent: #fff;
+	--teckform-font: var(--e-global-typography-text-font-family, system-ui), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	--teckform-heading-font: var(--e-global-typography-primary-font-family, system-ui), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Text on accent-colored buttons: the dark accent is light, so its text goes dark. */
-html[data-teckform-theme="dark"] {
+html[data-teckform-theme="dark"] body {
 	--teckform-on-accent: #0f172a;
 }
 
@@ -39,12 +47,19 @@ html[data-teckform-theme="dark"] {
 
 body {
 	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-family: var(--teckform-font);
 	font-size: 1rem;
 	line-height: 1.6;
 	color: var(--teckform-text);
 	background: var(--teckform-bg);
 	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* :where() keeps these at zero specificity so any widget's own heading styles win. */
+:where(h1, h2, h3, h4, h5, h6) {
+	color: var(--teckform-heading);
+	font-family: var(--teckform-heading-font);
+	line-height: 1.25;
 }
 
 img {
@@ -170,7 +185,7 @@ html[data-teckform-theme="dark"] .teckform-dark-toggle--icon .teckform-dark-togg
 .teckform-dark-toggle__thumb {
 	position: absolute;
 	top: 0.25em;
-	left: 0.25em;
+	inset-inline-start: 0.25em;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -196,9 +211,38 @@ html[data-teckform-theme="dark"] .teckform-dark-toggle__thumb {
 	transform: translateX(1.5em);
 }
 
+html[dir="rtl"][data-teckform-theme="dark"] .teckform-dark-toggle__thumb {
+	transform: translateX(-1.5em);
+}
+
 .entry-title a {
 	color: inherit;
 	text-decoration: none;
+}
+
+.entry-meta {
+	margin-top: -0.5em;
+	color: var(--teckform-muted);
+}
+
+.entry-details {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 24px;
+	margin: 0 0 24px;
+	padding: 0;
+	color: var(--teckform-muted);
+	list-style: none;
+}
+
+.entry-image {
+	margin: 0 0 32px;
+}
+
+.entry-image img {
+	display: block;
+	width: 100%;
+	border-radius: 16px;
 }
 
 /* Header & Footer templates (Header & Footer menu in the dashboard) */

@@ -86,6 +86,24 @@ function teckform_elementor_global_colors() {
 }
 
 /**
+ * Dark versions of Elementor's four system colors, so headings and text
+ * stay readable in dark mode before anyone sets their own.
+ *
+ * @param string $id Global color ID.
+ * @return string Hex color, or '' to keep the light color.
+ */
+function teckform_dark_elementor_default( $id ) {
+	$defaults = array(
+		'primary'   => '#f9fafb',
+		'secondary' => '#cbd5e1',
+		'text'      => '#cbd5e1',
+		'accent'    => '#60a5fa',
+	);
+
+	return isset( $defaults[ $id ] ) ? $defaults[ $id ] : '';
+}
+
+/**
  * Customizer section: Appearance > Customize > Dark Mode.
  *
  * @param WP_Customize_Manager $wp_customize Customizer manager.
@@ -144,14 +162,14 @@ function teckform_dark_mode_customize_register( $wp_customize ) {
 		$setting = 'teckform_dark_elementor_' . $id;
 
 		$wp_customize->add_setting( $setting, array(
-			'default'           => '',
+			'default'           => teckform_dark_elementor_default( $id ),
 			'sanitize_callback' => 'sanitize_hex_color',
 		) );
 
 		$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, $setting, array(
 			/* translators: %s: Elementor global color name. */
 			'label'       => sprintf( __( 'Dark: Elementor "%s" color', 'teckform' ), $title ),
-			'description' => __( 'Leave empty to keep the same color in dark mode.', 'teckform' ),
+			'description' => __( 'Clear it to keep the same color in dark mode.', 'teckform' ),
 			'section'     => 'teckform_dark_mode',
 		) ) );
 	}
@@ -202,11 +220,16 @@ function teckform_dark_mode_styles() {
 		return;
 	}
 
-	$css = 'html[data-teckform-theme="dark"]{color-scheme:dark;';
+	// On body, like the light values in style.css, so these win over them.
+	$css = 'html[data-teckform-theme="dark"]{color-scheme:dark}html[data-teckform-theme="dark"] body{';
 
 	foreach ( teckform_dark_mode_colors() as $key => $color ) {
 		$value = sanitize_hex_color( get_theme_mod( 'teckform_dark_' . $key, $color['default'] ) );
 		$css  .= $value ? '--teckform-' . $key . ':' . $value . ';' : '';
+
+		if ( $value && 'text' === $key ) {
+			$css .= '--teckform-heading:' . $value . ';';
+		}
 	}
 
 	$css .= '}';
@@ -215,7 +238,7 @@ function teckform_dark_mode_styles() {
 	$elements = '';
 
 	foreach ( array_keys( teckform_elementor_global_colors() ) as $id ) {
-		$value     = sanitize_hex_color( get_theme_mod( 'teckform_dark_elementor_' . $id, '' ) );
+		$value     = sanitize_hex_color( get_theme_mod( 'teckform_dark_elementor_' . $id, teckform_dark_elementor_default( $id ) ) );
 		$elements .= $value ? '--e-global-color-' . $id . ':' . $value . ';' : '';
 	}
 

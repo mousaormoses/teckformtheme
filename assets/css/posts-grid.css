@@ -1,0 +1,358 @@
+/* Teckform Posts Grid widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-posts-grid {
+	--teckform-posts-grid-columns: 3;
+	--teckform-posts-grid-ratio: 16 / 9;
+	--teckform-posts-grid-lift: -6px;
+	--teckform-posts-grid-zoom: 1.06;
+	--teckform-posts-grid-justify: flex-start;
+	scroll-margin-top: 2rem;
+	color: var(--teckform-text);
+}
+
+.teckform-posts-grid__items {
+	display: grid;
+	grid-template-columns: repeat(var(--teckform-posts-grid-columns), minmax(0, 1fr));
+	gap: 32px 28px;
+}
+
+/* Card */
+.teckform-posts-grid__card {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid var(--teckform-border);
+	border-radius: 14px;
+	background-color: var(--teckform-surface);
+	transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.teckform-posts-grid--lift .teckform-posts-grid__card:hover,
+.teckform-posts-grid--lift .teckform-posts-grid__card:focus-within {
+	transform: translateY(var(--teckform-posts-grid-lift));
+	box-shadow: 0 20px 40px -20px rgba(15, 23, 42, 0.35);
+}
+
+.teckform-posts-grid__media {
+	position: relative;
+	aspect-ratio: var(--teckform-posts-grid-ratio);
+	overflow: hidden;
+	background-color: var(--teckform-border);
+}
+
+.teckform-posts-grid__image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.teckform-posts-grid--zoom .teckform-posts-grid__card:hover .teckform-posts-grid__image,
+.teckform-posts-grid--zoom .teckform-posts-grid__card:focus-within .teckform-posts-grid__image {
+	transform: scale(var(--teckform-posts-grid-zoom));
+}
+
+.teckform-posts-grid__body {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	align-items: var(--teckform-posts-grid-justify);
+	padding: 22px 24px 24px;
+	text-align: start;
+}
+
+/* Badge */
+.teckform-posts-grid__badge {
+	position: relative;
+	z-index: 2;
+	display: inline-block;
+	margin-block-end: 12px;
+	padding: 4px 12px;
+	border-radius: 999px;
+	background-color: var(--teckform-accent);
+	color: var(--teckform-on-accent, #fff);
+	font-size: 0.75rem;
+	font-weight: 600;
+	line-height: 1.5;
+	letter-spacing: 0.02em;
+	text-decoration: none;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+a.teckform-posts-grid__badge:hover,
+a.teckform-posts-grid__badge:focus-visible {
+	background-color: color-mix(in srgb, var(--teckform-accent) 85%, #000);
+	color: var(--teckform-on-accent, #fff);
+}
+
+.teckform-posts-grid__media .teckform-posts-grid__badge {
+	position: absolute;
+	inset-block-start: 14px;
+	inset-inline-start: 14px;
+	margin: 0;
+}
+
+/* Title: its link stretches over the whole card. */
+.teckform-posts-grid__title {
+	margin: 0 0 10px;
+	color: var(--teckform-text);
+	font-size: 1.25rem;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.teckform-posts-grid__link {
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.teckform-posts-grid__link::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	border-radius: inherit;
+}
+
+.teckform-posts-grid__card:hover .teckform-posts-grid__link {
+	color: var(--teckform-accent);
+}
+
+.teckform-posts-grid__link:focus-visible {
+	outline: none;
+}
+
+.teckform-posts-grid__link:focus-visible::after {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: -2px;
+}
+
+/* Meta */
+.teckform-posts-grid__meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: var(--teckform-posts-grid-justify);
+	gap: 4px 0;
+	margin-block-end: 12px;
+	color: var(--teckform-muted);
+	font-size: 0.875rem;
+}
+
+.teckform-posts-grid__meta > * + *::before {
+	content: "\00B7";
+	margin-inline: 8px;
+}
+
+/* Excerpt and read more */
+.teckform-posts-grid__excerpt {
+	margin: 0 0 16px;
+	color: var(--teckform-muted);
+	font-size: 0.9375rem;
+	line-height: 1.65;
+}
+
+.teckform-posts-grid__read-more {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-block-start: auto;
+	color: var(--teckform-accent);
+	font-size: 0.9375rem;
+	font-weight: 600;
+	transition: color 0.2s ease;
+}
+
+.teckform-posts-grid__read-more svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+	transition: transform 0.2s ease;
+}
+
+.teckform-posts-grid__card:hover .teckform-posts-grid__read-more svg,
+.teckform-posts-grid__card:focus-within .teckform-posts-grid__read-more svg {
+	transform: translateX(4px);
+}
+
+[dir="rtl"] .teckform-posts-grid__read-more svg {
+	transform: scaleX(-1);
+}
+
+[dir="rtl"] .teckform-posts-grid__card:hover .teckform-posts-grid__read-more svg,
+[dir="rtl"] .teckform-posts-grid__card:focus-within .teckform-posts-grid__read-more svg {
+	transform: scaleX(-1) translateX(4px);
+}
+
+/* Overlay layout: the image fills the card and the text sits on top. */
+.teckform-posts-grid--overlay .teckform-posts-grid__card {
+	aspect-ratio: var(--teckform-posts-grid-ratio);
+	justify-content: flex-end;
+	border: 0;
+	background-color: var(--teckform-accent);
+	color: #fff;
+}
+
+.teckform-posts-grid--overlay .teckform-posts-grid__media {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	aspect-ratio: auto;
+}
+
+/* Below the text (the card isolates its stacking), above the image. */
+.teckform-posts-grid__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background-image: linear-gradient(to top, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.35) 55%, rgba(15, 23, 42, 0.05) 100%);
+	transition: opacity 0.3s ease;
+	pointer-events: none;
+}
+
+.teckform-posts-grid--overlay .teckform-posts-grid__card--no-image .teckform-posts-grid__overlay {
+	display: none;
+}
+
+.teckform-posts-grid--overlay .teckform-posts-grid__body {
+	flex: 0 0 auto;
+	padding: 28px;
+}
+
+.teckform-posts-grid--overlay .teckform-posts-grid__title,
+.teckform-posts-grid--overlay .teckform-posts-grid__card:hover .teckform-posts-grid__link {
+	color: #fff;
+}
+
+.teckform-posts-grid--overlay .teckform-posts-grid__meta,
+.teckform-posts-grid--overlay .teckform-posts-grid__excerpt {
+	color: rgba(255, 255, 255, 0.82);
+}
+
+.teckform-posts-grid--overlay .teckform-posts-grid__read-more {
+	margin-block-start: 0;
+	color: #fff;
+}
+
+.teckform-posts-grid--overlay .teckform-posts-grid__card--no-image,
+.teckform-posts-grid--overlay .teckform-posts-grid__card--no-image .teckform-posts-grid__title,
+.teckform-posts-grid--overlay .teckform-posts-grid__card--no-image .teckform-posts-grid__read-more {
+	color: var(--teckform-on-accent, #fff);
+}
+
+/* Pagination */
+.teckform-posts-grid__pagination {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin-block-start: 48px;
+}
+
+.teckform-posts-grid__page {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 42px;
+	height: 42px;
+	padding: 0 12px;
+	border: 1px solid var(--teckform-border);
+	border-radius: 10px;
+	background-color: var(--teckform-surface);
+	color: var(--teckform-text);
+	font-size: 0.9375rem;
+	font-weight: 600;
+	line-height: 1;
+	text-decoration: none;
+	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+a.teckform-posts-grid__page:hover,
+a.teckform-posts-grid__page:focus-visible {
+	border-color: var(--teckform-accent);
+	color: var(--teckform-accent);
+}
+
+a.teckform-posts-grid__page:focus-visible {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: 2px;
+}
+
+.teckform-posts-grid__page.is-current {
+	border-color: var(--teckform-accent);
+	background-color: var(--teckform-accent);
+	color: var(--teckform-on-accent, #fff);
+}
+
+.teckform-posts-grid__page--dots {
+	min-width: 0;
+	padding: 0 4px;
+	border-color: transparent;
+	background-color: transparent;
+	color: var(--teckform-muted);
+}
+
+.teckform-posts-grid__page svg {
+	width: 20px;
+	height: 20px;
+	fill: currentColor;
+}
+
+/* The arrow icon points back; flip it for "next", and both again for right-to-left. */
+.teckform-posts-grid__page--next svg,
+[dir="rtl"] .teckform-posts-grid__page--prev svg {
+	transform: scaleX(-1);
+}
+
+[dir="rtl"] .teckform-posts-grid__page--next svg {
+	transform: none;
+}
+
+/* Editor-only message when there is nothing to show. */
+.teckform-posts-grid__placeholder {
+	padding: 32px;
+	border: 2px dashed var(--teckform-border);
+	border-radius: 12px;
+	color: var(--teckform-muted);
+	text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-posts-grid *,
+	.teckform-posts-grid *::before,
+	.teckform-posts-grid *::after {
+		transition: none !important;
+	}
+
+	.teckform-posts-grid--lift .teckform-posts-grid__card:hover,
+	.teckform-posts-grid--lift .teckform-posts-grid__card:focus-within {
+		transform: none;
+	}
+
+	.teckform-posts-grid--zoom .teckform-posts-grid__card:hover .teckform-posts-grid__image,
+	.teckform-posts-grid--zoom .teckform-posts-grid__card:focus-within .teckform-posts-grid__image {
+		transform: none;
+	}
+}
+
+/* Fallback column counts when the widget's responsive values are not set. */
+@media (max-width: 1024px) {
+	.teckform-posts-grid {
+		--teckform-posts-grid-columns: 2;
+	}
+}
+
+@media (max-width: 767px) {
+	.teckform-posts-grid {
+		--teckform-posts-grid-columns: 1;
+	}
+
+	.teckform-posts-grid--overlay .teckform-posts-grid__body {
+		padding: 22px;
+	}
+}

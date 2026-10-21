@@ -1,0 +1,206 @@
+/* Teckform FAQ widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-faq {
+	--teckform-faq-gap: 12px;
+	--teckform-faq-column-gap: 24px;
+	--teckform-faq-icon-size: 16px;
+	--teckform-faq-icon-box: var(--teckform-faq-icon-size);
+	--teckform-faq-pad-top: 20px;
+	--teckform-faq-pad-end: 24px;
+	--teckform-faq-pad-bottom: 20px;
+	--teckform-faq-pad-start: 24px;
+	display: grid;
+	gap: var(--teckform-faq-gap) var(--teckform-faq-column-gap);
+	color: var(--teckform-text);
+}
+
+.teckform-faq__column {
+	display: grid;
+	align-content: start;
+	gap: var(--teckform-faq-gap);
+}
+
+/* Two columns on desktop only. Each column keeps its own height, so opening an
+   item never leaves a gap in the other column. */
+@media (min-width: 1025px) {
+	.teckform-faq--columns-2 {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	}
+}
+
+/* Item */
+.teckform-faq__item {
+	overflow: hidden;
+	border: 1px solid var(--teckform-border);
+	border-radius: 12px;
+	background: var(--teckform-surface);
+	transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.teckform-faq__heading {
+	margin: 0;
+	padding: 0;
+	font: inherit;
+}
+
+/* Question button */
+.teckform-faq__question {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	width: 100%;
+	margin: 0;
+	padding-block: var(--teckform-faq-pad-top) var(--teckform-faq-pad-bottom);
+	padding-inline: var(--teckform-faq-pad-start) var(--teckform-faq-pad-end);
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+	color: var(--teckform-text);
+	font-family: inherit;
+	font-size: 1.0625rem;
+	font-weight: 600;
+	line-height: 1.5;
+	text-align: start;
+	text-transform: none;
+	cursor: pointer;
+	transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.teckform-faq__question:hover {
+	color: var(--teckform-accent);
+}
+
+.teckform-faq__question:focus-visible {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: -2px;
+}
+
+.teckform-faq__question-text {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.teckform-faq--icon-at-start .teckform-faq__icon {
+	order: -1;
+}
+
+/* Icon: drawn with CSS so it follows the text color. */
+.teckform-faq__icon {
+	position: relative;
+	flex: 0 0 auto;
+	width: var(--teckform-faq-icon-box);
+	height: var(--teckform-faq-icon-box);
+	border-radius: 50%;
+	color: var(--teckform-muted);
+	transition: color 0.25s ease, background-color 0.25s ease, transform 0.3s ease;
+}
+
+.teckform-faq--icon-circle {
+	--teckform-faq-icon-box: calc(var(--teckform-faq-icon-size) * 2);
+}
+
+.teckform-faq--icon-circle .teckform-faq__icon {
+	background: color-mix(in srgb, var(--teckform-accent) 10%, transparent);
+	color: var(--teckform-accent);
+}
+
+.teckform-faq__item.is-open .teckform-faq__icon {
+	color: var(--teckform-accent);
+}
+
+.teckform-faq--icon-circle .teckform-faq__item.is-open .teckform-faq__icon {
+	background: var(--teckform-accent);
+	color: var(--teckform-on-accent, #fff);
+}
+
+/* Plus / minus */
+.teckform-faq--icon-plus .teckform-faq__icon::before,
+.teckform-faq--icon-plus .teckform-faq__icon::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: var(--teckform-faq-icon-size);
+	height: 2px;
+	border-radius: 2px;
+	background: currentColor;
+	transform: translate(-50%, -50%);
+	transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.teckform-faq--icon-plus .teckform-faq__icon::after {
+	transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.teckform-faq--icon-plus .teckform-faq__item.is-open .teckform-faq__icon::after {
+	opacity: 0;
+	transform: translate(-50%, -50%) rotate(180deg);
+}
+
+/* Chevron */
+.teckform-faq--icon-chevron .teckform-faq__icon::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: calc(var(--teckform-faq-icon-size) * 0.55);
+	height: calc(var(--teckform-faq-icon-size) * 0.55);
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: translate(-50%, -70%) rotate(45deg);
+}
+
+.teckform-faq--icon-chevron .teckform-faq__item.is-open .teckform-faq__icon {
+	transform: rotate(180deg);
+}
+
+/* Answer. The outer element animates its height; padding lives on the inner one
+   so a closed answer has no height at all. */
+.teckform-faq__answer {
+	overflow: hidden;
+	transition: height 0.3s ease;
+}
+
+.teckform-faq__answer-inner {
+	padding-block: 0 var(--teckform-faq-pad-bottom);
+	padding-inline: var(--teckform-faq-pad-start) var(--teckform-faq-pad-end);
+	color: var(--teckform-muted);
+	font-size: 1rem;
+	line-height: 1.7;
+	text-align: start;
+}
+
+.teckform-faq--icon-at-start:not(.teckform-faq--icon-none) .teckform-faq__answer-inner {
+	padding-inline-start: calc(var(--teckform-faq-pad-start) + var(--teckform-faq-icon-box) + 16px);
+}
+
+.teckform-faq__answer-inner > :first-child {
+	margin-top: 0;
+}
+
+.teckform-faq__answer-inner > :last-child {
+	margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-faq *,
+	.teckform-faq *::before,
+	.teckform-faq *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+@media (max-width: 767px) {
+	.teckform-faq {
+		--teckform-faq-pad-top: 16px;
+		--teckform-faq-pad-end: 18px;
+		--teckform-faq-pad-bottom: 16px;
+		--teckform-faq-pad-start: 18px;
+	}
+
+	.teckform-faq__question {
+		font-size: 1rem;
+	}
+}

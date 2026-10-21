@@ -1,0 +1,233 @@
+/* Teckform Portfolio Grid widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-portfolio {
+	--teckform-portfolio-columns: 3;
+	--teckform-portfolio-ratio: 4 / 3;
+	--teckform-portfolio-zoom: 1.08;
+	color: var(--teckform-text);
+}
+
+/* Filter bar */
+.teckform-portfolio__filters {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px;
+	margin-block-end: 36px;
+}
+
+.teckform-portfolio__filter {
+	margin: 0;
+	padding: 9px 18px;
+	border: 1px solid var(--teckform-border);
+	border-radius: 999px;
+	background-color: transparent;
+	color: var(--teckform-text);
+	font: inherit;
+	font-size: 0.9375rem;
+	font-weight: 500;
+	line-height: 1.3;
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.teckform-portfolio__filter:hover,
+.teckform-portfolio__filter:focus-visible {
+	border-color: var(--teckform-accent);
+	background-color: transparent;
+	color: var(--teckform-accent);
+}
+
+.teckform-portfolio__filter:focus-visible {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: 2px;
+}
+
+.teckform-portfolio__filter[aria-pressed="true"] {
+	border-color: var(--teckform-accent);
+	background-color: var(--teckform-accent);
+	color: var(--teckform-on-accent, #fff);
+}
+
+/* Grid */
+.teckform-portfolio__grid {
+	display: grid;
+	grid-template-columns: repeat(var(--teckform-portfolio-columns), minmax(0, 1fr));
+	gap: 24px;
+}
+
+.teckform-portfolio__item {
+	min-width: 0;
+	transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Filtering: items fade and shrink out, then are hidden (see portfolio.js). */
+.teckform-portfolio__item.is-out {
+	opacity: 0;
+	transform: scale(0.92);
+}
+
+.teckform-portfolio__item[hidden] {
+	display: none;
+}
+
+.teckform-portfolio__link {
+	position: relative;
+	isolation: isolate;
+	display: block;
+	overflow: hidden;
+	border-radius: 14px;
+	color: #fff;
+	text-decoration: none;
+	transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.teckform-portfolio__link:focus-visible {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: 3px;
+}
+
+.teckform-portfolio__media {
+	display: block;
+	aspect-ratio: var(--teckform-portfolio-ratio);
+	overflow: hidden;
+	background-color: var(--teckform-surface);
+}
+
+.teckform-portfolio__image,
+.teckform-portfolio__no-image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.teckform-portfolio__no-image {
+	background:
+		linear-gradient(135deg, color-mix(in srgb, var(--teckform-accent) 30%, var(--teckform-surface)), var(--teckform-surface));
+}
+
+.teckform-portfolio--zoom .teckform-portfolio__link:hover .teckform-portfolio__image,
+.teckform-portfolio--zoom .teckform-portfolio__link:focus-visible .teckform-portfolio__image {
+	transform: scale(var(--teckform-portfolio-zoom));
+}
+
+/* Overlay with title and category */
+.teckform-portfolio__overlay {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	padding: 24px;
+	text-align: start;
+	transition: opacity 0.35s ease;
+}
+
+.teckform-portfolio__title {
+	margin: 0 0 4px;
+	color: #fff;
+	font-size: 1.25rem;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.teckform-portfolio__category {
+	display: block;
+	color: rgba(255, 255, 255, 0.8);
+	font-size: 0.875rem;
+}
+
+.teckform-portfolio__title,
+.teckform-portfolio__category {
+	transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.4s ease;
+}
+
+/* "On hover" style: a tinted overlay fades in and the text slides up. */
+.teckform-portfolio--hover .teckform-portfolio__overlay {
+	background-color: color-mix(in srgb, var(--teckform-accent) 30%, rgba(15, 23, 42, 0.82));
+	opacity: 0;
+}
+
+.teckform-portfolio--hover .teckform-portfolio__title,
+.teckform-portfolio--hover .teckform-portfolio__category {
+	transform: translateY(12px);
+}
+
+.teckform-portfolio--hover .teckform-portfolio__category {
+	transition-delay: 0.05s;
+}
+
+.teckform-portfolio--hover .teckform-portfolio__link:hover .teckform-portfolio__overlay,
+.teckform-portfolio--hover .teckform-portfolio__link:focus-visible .teckform-portfolio__overlay {
+	opacity: 1;
+}
+
+.teckform-portfolio--hover .teckform-portfolio__link:hover .teckform-portfolio__title,
+.teckform-portfolio--hover .teckform-portfolio__link:hover .teckform-portfolio__category,
+.teckform-portfolio--hover .teckform-portfolio__link:focus-visible .teckform-portfolio__title,
+.teckform-portfolio--hover .teckform-portfolio__link:focus-visible .teckform-portfolio__category {
+	transform: none;
+}
+
+/* Touch screens have no hover: show the text all the time. */
+@media (hover: none) {
+	.teckform-portfolio--hover .teckform-portfolio__overlay {
+		background-color: transparent;
+		background-image: linear-gradient(to top, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0) 65%);
+		opacity: 1;
+	}
+
+	.teckform-portfolio--hover .teckform-portfolio__title,
+	.teckform-portfolio--hover .teckform-portfolio__category {
+		transform: none;
+	}
+}
+
+/* "Caption" style: always visible, on a gradient at the bottom. */
+.teckform-portfolio--caption .teckform-portfolio__overlay {
+	inset-block-start: auto;
+	padding-block-start: 56px;
+	background-image: linear-gradient(to top, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0));
+}
+
+/* Editor-only message when there are no projects. */
+.teckform-portfolio__placeholder {
+	padding: 32px;
+	border: 2px dashed var(--teckform-border);
+	border-radius: 12px;
+	color: var(--teckform-muted);
+	text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-portfolio *,
+	.teckform-portfolio *::before,
+	.teckform-portfolio *::after {
+		transition: none !important;
+	}
+
+	.teckform-portfolio--zoom .teckform-portfolio__link:hover .teckform-portfolio__image,
+	.teckform-portfolio--zoom .teckform-portfolio__link:focus-visible .teckform-portfolio__image,
+	.teckform-portfolio__item.is-out {
+		transform: none;
+	}
+}
+
+/* Fallback column counts when the widget's responsive values are not set. */
+@media (max-width: 1024px) {
+	.teckform-portfolio {
+		--teckform-portfolio-columns: 2;
+	}
+}
+
+@media (max-width: 767px) {
+	.teckform-portfolio {
+		--teckform-portfolio-columns: 1;
+	}
+
+	.teckform-portfolio__filters {
+		margin-block-end: 24px;
+	}
+}

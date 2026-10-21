@@ -1,0 +1,341 @@
+/* Teckform Testimonials Carousel widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-testimonials {
+	--teckform-testimonials-per-view: 3;
+	--teckform-testimonials-gap: 24px;
+	--teckform-testimonials-dot: 8px;
+	--teckform-testimonials-dot-active: 24px;
+	--teckform-testimonials-arrow-offset: -22px;
+	--teckform-testimonials-justify: flex-start;
+	position: relative;
+	color: var(--teckform-text);
+}
+
+.teckform-testimonials__viewport {
+	position: relative;
+}
+
+/* The row scrolls natively (touch swipe, trackpad) and snaps to each slide. */
+.teckform-testimonials__track {
+	display: flex;
+	gap: var(--teckform-testimonials-gap);
+	padding-block: 8px 16px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	overscroll-behavior-x: contain;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	outline: none;
+}
+
+.teckform-testimonials__track::-webkit-scrollbar {
+	display: none;
+}
+
+.teckform-testimonials__track:focus-visible {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: 4px;
+	border-radius: 4px;
+}
+
+.teckform-testimonials.is-dragging .teckform-testimonials__track {
+	scroll-snap-type: none;
+	cursor: grabbing;
+	user-select: none;
+}
+
+.teckform-testimonials__slide {
+	display: flex;
+	flex: 0 0 calc((100% - (var(--teckform-testimonials-per-view) - 1) * var(--teckform-testimonials-gap)) / var(--teckform-testimonials-per-view));
+	min-width: 0;
+	scroll-snap-align: start;
+}
+
+.teckform-testimonials__slide img {
+	-webkit-user-drag: none;
+}
+
+/* Card */
+.teckform-testimonials__card {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: column;
+	align-items: var(--teckform-testimonials-justify);
+	margin: 0;
+	padding: 32px;
+	border: 1px solid var(--teckform-border);
+	border-radius: 16px;
+	background: var(--teckform-surface);
+	text-align: start;
+	transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.teckform-testimonials__icon {
+	display: inline-flex;
+	margin-bottom: 16px;
+	color: var(--teckform-accent);
+	line-height: 0;
+}
+
+.teckform-testimonials__icon svg {
+	width: 36px;
+	height: 36px;
+	fill: currentColor;
+}
+
+.teckform-testimonials__quote {
+	flex: 1 1 auto;
+	margin: 0 0 24px;
+	padding: 0;
+	border: 0;
+	color: var(--teckform-text);
+	font-size: 1.0625rem;
+	font-style: normal;
+	line-height: 1.7;
+	quotes: none;
+}
+
+.teckform-testimonials__quote::before,
+.teckform-testimonials__quote::after {
+	content: none;
+}
+
+.teckform-testimonials__quote p {
+	margin: 0 0 0.75em;
+}
+
+.teckform-testimonials__quote p:last-child {
+	margin-bottom: 0;
+}
+
+.teckform-testimonials__author {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin: 0;
+	text-align: start;
+}
+
+.teckform-testimonials__photo {
+	flex: 0 0 auto;
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.teckform-testimonials__meta {
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.teckform-testimonials__name {
+	color: var(--teckform-text);
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.teckform-testimonials__role {
+	color: var(--teckform-muted);
+	font-size: 0.875rem;
+	line-height: 1.4;
+}
+
+/* Stars: an empty row with a filled row on top, cut to the rating's width. */
+.teckform-testimonials__stars {
+	position: relative;
+	display: inline-block;
+	margin-bottom: 14px;
+	color: var(--teckform-border);
+	font-size: 1rem;
+	letter-spacing: 2px;
+	line-height: 1;
+	white-space: nowrap;
+}
+
+.teckform-testimonials__stars::before,
+.teckform-testimonials__stars-fill::before {
+	content: "\2605\2605\2605\2605\2605";
+}
+
+.teckform-testimonials__stars-fill {
+	position: absolute;
+	top: 0;
+	inset-inline-start: 0;
+	overflow: hidden;
+	color: var(--teckform-testimonials-star, #f59e0b);
+	white-space: nowrap;
+}
+
+/* Centered big quote */
+.teckform-testimonials--centered {
+	--teckform-testimonials-justify: center;
+}
+
+.teckform-testimonials--centered .teckform-testimonials__card {
+	padding: 16px 24px;
+	border-color: transparent;
+	background: transparent;
+	text-align: center;
+}
+
+.teckform-testimonials--centered .teckform-testimonials__icon svg {
+	width: 48px;
+	height: 48px;
+}
+
+.teckform-testimonials--centered .teckform-testimonials__quote {
+	flex: 0 0 auto;
+	max-width: 820px;
+	margin-bottom: 32px;
+	font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+	font-weight: 500;
+	line-height: 1.5;
+}
+
+.teckform-testimonials--centered .teckform-testimonials__author {
+	flex-direction: column;
+	gap: 12px;
+	text-align: center;
+}
+
+.teckform-testimonials--centered .teckform-testimonials__photo {
+	width: 72px;
+	height: 72px;
+}
+
+/* Navigation: arrows and dots */
+.teckform-testimonials__nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 16px;
+	margin-top: 24px;
+}
+
+.teckform-testimonials__arrow {
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 1px solid var(--teckform-border);
+	border-radius: 50%;
+	background: var(--teckform-surface);
+	color: var(--teckform-text);
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.teckform-testimonials__arrow:hover,
+.teckform-testimonials__arrow:focus-visible {
+	border-color: var(--teckform-accent);
+	background: var(--teckform-accent);
+	color: var(--teckform-on-accent);
+}
+
+.teckform-testimonials__arrow:focus-visible {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: 2px;
+}
+
+.teckform-testimonials__arrow:disabled {
+	opacity: 0.4;
+	cursor: default;
+	pointer-events: none;
+}
+
+.teckform-testimonials__arrow svg {
+	width: 20px;
+	height: 20px;
+	fill: currentColor;
+}
+
+/* Previous points to the start, next to the end, on right-to-left sites too. */
+[dir="rtl"] .teckform-testimonials__arrow svg {
+	transform: scaleX(-1);
+}
+
+.teckform-testimonials--arrows-sides .teckform-testimonials__arrow {
+	position: absolute;
+	top: 50%;
+	z-index: 2;
+	transform: translateY(-50%);
+}
+
+.teckform-testimonials--arrows-sides .teckform-testimonials__arrow--prev {
+	inset-inline-start: var(--teckform-testimonials-arrow-offset);
+}
+
+.teckform-testimonials--arrows-sides .teckform-testimonials__arrow--next {
+	inset-inline-end: var(--teckform-testimonials-arrow-offset);
+}
+
+.teckform-testimonials__dots {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.teckform-testimonials__dot {
+	width: var(--teckform-testimonials-dot);
+	height: var(--teckform-testimonials-dot);
+	padding: 0;
+	border: 0;
+	border-radius: 999px;
+	background: var(--teckform-border);
+	cursor: pointer;
+	transition: width 0.3s ease, background-color 0.2s ease;
+}
+
+.teckform-testimonials__dot:hover {
+	background: var(--teckform-muted);
+}
+
+.teckform-testimonials__dot[aria-current="true"] {
+	width: var(--teckform-testimonials-dot-active);
+	background: var(--teckform-accent);
+}
+
+.teckform-testimonials__dot:focus-visible {
+	outline: 2px solid var(--teckform-accent);
+	outline-offset: 3px;
+}
+
+/* Everything fits: no need to slide. */
+.teckform-testimonials.is-static .teckform-testimonials__arrow,
+.teckform-testimonials.is-static .teckform-testimonials__dots {
+	display: none;
+}
+
+.teckform-testimonials__notice {
+	padding: 24px;
+	border: 1px dashed var(--teckform-border);
+	border-radius: 12px;
+	color: var(--teckform-muted);
+	text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-testimonials *,
+	.teckform-testimonials *::before,
+	.teckform-testimonials *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+@media (max-width: 767px) {
+	.teckform-testimonials {
+		--teckform-testimonials-arrow-offset: 4px;
+	}
+
+	.teckform-testimonials__card {
+		padding: 24px;
+	}
+}

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TECKFORM_VERSION', '1.3.0' );
+define( 'TECKFORM_VERSION', '1.4.0' );
 
 if ( ! isset( $content_width ) ) {
 	$content_width = 1140;
@@ -112,6 +112,46 @@ function teckform_is_built_with_elementor( $post_id ) {
 }
 
 /**
+ * Under the title of a single post, service or project (not built with Elementor):
+ * the date for posts, client/year/link for projects, then the featured image.
+ */
+function teckform_entry_header() {
+	$type = get_post_type();
+
+	if ( 'post' === $type ) {
+		echo '<p class="entry-meta">' . esc_html( get_the_date() ) . '</p>';
+	}
+
+	if ( 'teckform_project' === $type ) {
+		$details = array_filter( array(
+			__( 'Client', 'teckform' ) => get_post_meta( get_the_ID(), '_teckform_client', true ),
+			__( 'Year', 'teckform' )   => get_post_meta( get_the_ID(), '_teckform_year', true ),
+		) );
+		$url     = get_post_meta( get_the_ID(), '_teckform_url', true );
+
+		if ( $details || $url ) {
+			echo '<ul class="entry-details">';
+
+			foreach ( $details as $label => $value ) {
+				echo '<li><strong>' . esc_html( $label ) . ':</strong> ' . esc_html( $value ) . '</li>';
+			}
+
+			if ( $url ) {
+				echo '<li><a href="' . esc_url( $url ) . '" target="_blank" rel="noopener">' . esc_html__( 'Visit the live site', 'teckform' ) . '</a></li>';
+			}
+
+			echo '</ul>';
+		}
+	}
+
+	if ( in_array( $type, array( 'post', 'teckform_service', 'teckform_project' ), true ) && has_post_thumbnail() ) {
+		echo '<figure class="entry-image">';
+		the_post_thumbnail( 'large' );
+		echo '</figure>';
+	}
+}
+
+/**
  * Recommend Elementor in the dashboard when it is not active.
  */
 function teckform_elementor_notice() {
@@ -131,5 +171,14 @@ add_action( 'admin_notices', 'teckform_elementor_notice' );
 
 require_once get_template_directory() . '/inc/dark-mode.php';
 require_once get_template_directory() . '/inc/templates.php';
+require_once get_template_directory() . '/inc/content-types.php';
+require_once get_template_directory() . '/inc/mega-menu.php';
+require_once get_template_directory() . '/inc/forms/helpers.php';
+require_once get_template_directory() . '/inc/forms/post-types.php';
+require_once get_template_directory() . '/inc/forms/contact-form.php';
+require_once get_template_directory() . '/inc/forms/newsletter.php';
+require_once get_template_directory() . '/inc/forms/login-form.php';
+require_once get_template_directory() . '/inc/demo/importer.php';
 require_once get_template_directory() . '/inc/elementor/widgets.php';
 require_once get_template_directory() . '/inc/elementor/dark-mode-controls.php';
+require_once get_template_directory() . '/inc/elementor/global-styles.php';

@@ -20,12 +20,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 function teckform_elementor_widgets() {
 	return array(
 		'class-hero.php'             => '\Teckform\Elementor\Hero',
+		'class-posts-grid.php'       => '\Teckform\Elementor\Posts_Grid',
+		'class-portfolio.php'        => '\Teckform\Elementor\Portfolio',
+		'class-team.php'             => '\Teckform\Elementor\Team',
+		'class-testimonials.php'     => '\Teckform\Elementor\Testimonials',
+		'class-logo-carousel.php'    => '\Teckform\Elementor\Logo_Carousel',
+		'class-flip-box.php'         => '\Teckform\Elementor\Flip_Box',
+		'class-before-after.php'     => '\Teckform\Elementor\Before_After',
+		'class-hotspots.php'         => '\Teckform\Elementor\Hotspots',
+		'class-pricing-table.php'    => '\Teckform\Elementor\Pricing_Table',
+		'class-faq.php'              => '\Teckform\Elementor\Faq',
+		'class-process.php'          => '\Teckform\Elementor\Process',
+		'class-call-to-action.php'   => '\Teckform\Elementor\Call_To_Action',
+		'class-countdown.php'        => '\Teckform\Elementor\Countdown',
+		'class-contact-form.php'     => '\Teckform\Elementor\Contact_Form',
+		'class-newsletter.php'       => '\Teckform\Elementor\Newsletter',
+		'class-login-form.php'       => '\Teckform\Elementor\Login_Form',
 		'class-feature-box.php'      => '\Teckform\Elementor\Feature_Box',
 		'class-site-logo.php'        => '\Teckform\Elementor\Site_Logo',
 		'class-nav-menu.php'         => '\Teckform\Elementor\Nav_Menu',
 		'class-search.php'           => '\Teckform\Elementor\Search',
 		'class-copyright.php'        => '\Teckform\Elementor\Copyright',
 		'class-dark-mode-toggle.php' => '\Teckform\Elementor\Dark_Mode_Toggle',
+		'class-animated-headline.php' => '\Teckform\Elementor\Animated_Headline',
+		'class-popup.php'            => '\Teckform\Elementor\Popup',
 	);
 }
 
@@ -95,45 +113,31 @@ function teckform_register_elementor_widgets( $widgets_manager ) {
 add_action( 'elementor/widgets/register', 'teckform_register_elementor_widgets' );
 
 /**
- * Register the widget stylesheet. Widgets load it through get_style_depends(),
- * so it is only printed on pages that use one of them.
+ * Register every widget stylesheet in assets/css as `teckform-{file name}`.
+ * Widgets load theirs through get_style_depends(), so each one is only printed
+ * on pages that use that widget.
  */
 function teckform_register_elementor_widget_styles() {
-	wp_register_style(
-		'teckform-widgets',
-		get_template_directory_uri() . '/assets/css/widgets.css',
-		array(),
-		TECKFORM_VERSION
-	);
+	foreach ( glob( get_template_directory() . '/assets/css/*.css' ) as $file ) {
+		$name = basename( $file, '.css' );
 
-	wp_register_style(
-		'teckform-hero',
-		get_template_directory_uri() . '/assets/css/hero.css',
-		array(),
-		TECKFORM_VERSION
-	);
+		wp_register_style( 'teckform-' . $name, get_template_directory_uri() . '/assets/css/' . $name . '.css', array(), TECKFORM_VERSION );
+	}
 }
 add_action( 'elementor/frontend/after_register_styles', 'teckform_register_elementor_widget_styles' );
 
 /**
- * Register the widget script (mobile menu, full-screen search). Widgets load it
- * through get_script_depends().
+ * Register every widget script in assets/js as `teckform-{file name}`, loaded in
+ * the footer. Widgets load theirs through get_script_depends(). theme.js is
+ * enqueued separately on every page (functions.php), so it's skipped here.
  */
 function teckform_register_elementor_widget_scripts() {
-	wp_register_script(
-		'teckform-widgets',
-		get_template_directory_uri() . '/assets/js/widgets.js',
-		array(),
-		TECKFORM_VERSION,
-		true
-	);
+	foreach ( glob( get_template_directory() . '/assets/js/*.js' ) as $file ) {
+		$name = basename( $file, '.js' );
 
-	wp_register_script(
-		'teckform-hero',
-		get_template_directory_uri() . '/assets/js/hero.js',
-		array(),
-		TECKFORM_VERSION,
-		true
-	);
+		if ( 'theme' !== $name ) {
+			wp_register_script( 'teckform-' . $name, get_template_directory_uri() . '/assets/js/' . $name . '.js', array(), TECKFORM_VERSION, true );
+		}
+	}
 }
 add_action( 'elementor/frontend/after_register_scripts', 'teckform_register_elementor_widget_scripts' );

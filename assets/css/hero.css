@@ -45,7 +45,7 @@
 }
 
 .teckform-hero__badge:not(:has(.teckform-hero__badge-label)) {
-	padding-left: 14px;
+	padding-inline-start: 14px;
 }
 
 a.teckform-hero__badge:hover {
@@ -129,7 +129,7 @@ a.teckform-hero__badge:hover {
 	display: inline-block;
 	width: 0.06em;
 	height: 0.9em;
-	margin-left: 0.06em;
+	margin-inline-start: 0.06em;
 	vertical-align: -0.05em;
 	background: currentColor;
 	animation: teckform-hero-caret 1s steps(1) infinite;
@@ -297,7 +297,7 @@ a.teckform-hero__badge:hover {
 }
 
 .teckform-hero__avatar-row > * + * {
-	margin-left: -12px;
+	margin-inline-start: -12px;
 }
 
 .teckform-hero__avatar-row span {
@@ -341,7 +341,7 @@ a.teckform-hero__badge:hover {
 .teckform-hero__stars-fill {
 	position: absolute;
 	top: 0;
-	left: 0;
+	inset-inline-start: 0;
 	overflow: hidden;
 	color: var(--teckform-hero-star, #f59e0b);
 	white-space: nowrap;
@@ -431,7 +431,7 @@ a.teckform-hero__badge:hover {
 	--teckform-hero-justify: flex-start;
 	max-width: none;
 	margin: 0;
-	text-align: left;
+	text-align: start;
 }
 
 .teckform-hero--split .teckform-hero__media,
@@ -550,7 +550,7 @@ a.teckform-hero__badge:hover {
 	z-index: -1;
 }
 
-.teckform-hero__bg-image,
+.teckform-hero .teckform-hero__bg-image,
 .teckform-hero__bg-video {
 	position: absolute;
 	inset: 0;
@@ -710,4 +710,14 @@ a.teckform-hero__badge:hover {
 	.teckform-hero__stat-value {
 		font-size: 1.75rem;
 	}
+}
+
+/* Right-to-left: arrows in buttons point and move the other way. */
+[dir="rtl"] .teckform-hero__button-icon,
+[dir="rtl"] .teckform-hero__badge-arrow {
+	transform: scaleX(-1);
+}
+
+[dir="rtl"] .teckform-hero__button:hover .teckform-hero__button-icon {
+	transform: scaleX(-1) translateX(3px);
 }

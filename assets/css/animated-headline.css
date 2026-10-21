@@ -1,0 +1,184 @@
+/* Teckform Animated Headline widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-animated-headline {
+	--teckform-animated-headline-speed: 500ms;
+	--teckform-animated-headline-draw: 1200ms;
+	--teckform-animated-headline-shape-width: 12;
+	text-align: start;
+}
+
+.teckform-animated-headline__title {
+	margin: 0;
+	color: var(--teckform-text);
+	font-size: clamp(2rem, 4.5vw, 3.5rem);
+	font-weight: 700;
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+}
+
+.teckform-animated-headline__dynamic {
+	color: var(--teckform-accent);
+}
+
+/* Rotating words: all words share one grid cell; JS sizes the box to the visible word. */
+.teckform-animated-headline__words {
+	display: inline-grid;
+	justify-items: start;
+	vertical-align: bottom;
+	transition: width var(--teckform-animated-headline-speed) ease;
+}
+
+.teckform-animated-headline__word {
+	grid-area: 1 / 1;
+	white-space: nowrap;
+	opacity: 0;
+	transition:
+		opacity var(--teckform-animated-headline-speed) ease,
+		transform var(--teckform-animated-headline-speed) cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.teckform-animated-headline__word.is-active {
+	opacity: 1;
+	transform: none;
+}
+
+/* Slide up: the next word rises from below, the old one leaves through the top. */
+.teckform-animated-headline--slide .teckform-animated-headline__words {
+	overflow: hidden;
+	padding-block: 0.08em;
+	margin-block: -0.08em;
+}
+
+.teckform-animated-headline--slide .teckform-animated-headline__word {
+	transform: translateY(100%);
+}
+
+.teckform-animated-headline--slide .teckform-animated-headline__word.is-active {
+	transform: none;
+}
+
+.teckform-animated-headline--slide .teckform-animated-headline__word.is-leaving {
+	opacity: 0;
+	transform: translateY(-100%);
+}
+
+/* Fade: a straight cross-fade. */
+.teckform-animated-headline--fade .teckform-animated-headline__word.is-leaving {
+	opacity: 0;
+}
+
+/* Flip: words turn over on their horizontal axis. */
+.teckform-animated-headline--flip .teckform-animated-headline__words {
+	perspective: 600px;
+}
+
+.teckform-animated-headline--flip .teckform-animated-headline__word {
+	backface-visibility: hidden;
+	transform: rotateX(-90deg);
+	transform-origin: 50% 50% -0.35em;
+}
+
+.teckform-animated-headline--flip .teckform-animated-headline__word.is-active {
+	transform: rotateX(0);
+}
+
+.teckform-animated-headline--flip .teckform-animated-headline__word.is-leaving {
+	opacity: 0;
+	transform: rotateX(90deg);
+}
+
+/* Typing cursor */
+.teckform-animated-headline--cursor .teckform-animated-headline__typed::after {
+	content: "";
+	display: inline-block;
+	width: 0.06em;
+	height: 0.9em;
+	margin-inline-start: 0.06em;
+	vertical-align: -0.05em;
+	background: var(--teckform-animated-headline-cursor, currentColor);
+	animation: teckform-animated-headline-caret 1s steps(1) infinite;
+}
+
+@keyframes teckform-animated-headline-caret {
+	50% {
+		opacity: 0;
+	}
+}
+
+/* Highlight: an SVG shape stretched over the word and drawn with stroke-dashoffset. */
+.teckform-animated-headline__highlight {
+	position: relative;
+	z-index: 0;
+	display: inline-block;
+	color: inherit;
+}
+
+.teckform-animated-headline__highlight-text {
+	position: relative;
+}
+
+.teckform-animated-headline__shape {
+	position: absolute;
+	inset-block-start: -0.15em;
+	inset-inline-start: -0.15em;
+	z-index: -1;
+	width: calc(100% + 0.3em);
+	height: calc(100% + 0.45em);
+	overflow: visible;
+	pointer-events: none;
+	transition: opacity 0.4s ease;
+}
+
+.teckform-animated-headline__shape--circle {
+	inset-block-start: -0.25em;
+	inset-inline-start: -0.3em;
+	width: calc(100% + 0.6em);
+	height: calc(100% + 0.5em);
+}
+
+.teckform-animated-headline__shape--strikethrough {
+	z-index: 1;
+}
+
+.teckform-animated-headline__shape path {
+	fill: none;
+	stroke: var(--teckform-animated-headline-shape, var(--teckform-accent));
+	stroke-width: var(--teckform-animated-headline-shape-width);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	/* pathLength="1": a dash as long as the path, then a gap long enough that nothing shows. */
+	stroke-dasharray: 1 2;
+	stroke-dashoffset: 1.05;
+	transition: stroke-dashoffset var(--teckform-animated-headline-draw) cubic-bezier(0.6, 0.1, 0.3, 1);
+}
+
+/* A second line (double underline) starts halfway through the first. */
+.teckform-animated-headline__shape path:nth-child(2) {
+	transition-delay: calc(var(--teckform-animated-headline-draw) * 0.5);
+}
+
+.teckform-animated-headline.is-drawn .teckform-animated-headline__shape path {
+	stroke-dashoffset: 0;
+}
+
+.teckform-animated-headline.is-erasing .teckform-animated-headline__shape {
+	opacity: 0;
+}
+
+.teckform-animated-headline.is-resetting .teckform-animated-headline__shape path {
+	transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-animated-headline *,
+	.teckform-animated-headline *::before,
+	.teckform-animated-headline *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+
+	/* No drawing: the shape is simply there. */
+	.teckform-animated-headline__shape path {
+		stroke-dashoffset: 0;
+	}
+}

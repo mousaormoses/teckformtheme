@@ -1,0 +1,177 @@
+/* Teckform Logo Carousel widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-logo-carousel {
+	--teckform-logos-height: 40px;
+	--teckform-logos-fade: 12%;
+	--teckform-logos-shift: -50%;
+	color: var(--teckform-muted);
+}
+
+/* On right-to-left sites the row runs the other way, so "toward the start" means rightward. */
+[dir="rtl"] .teckform-logo-carousel {
+	--teckform-logos-shift: 50%;
+}
+
+.teckform-logo-carousel__title {
+	margin: 0 0 24px;
+	color: var(--teckform-muted);
+	font-size: 0.875rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+/* One logo */
+.teckform-logo-carousel__logo {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	border-radius: 8px;
+	transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.teckform-logo-carousel__image {
+	display: block;
+	width: auto;
+	max-width: 160px;
+	height: var(--teckform-logos-height);
+	object-fit: contain;
+	opacity: var(--teckform-logos-opacity, 1);
+	transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.teckform-logo-carousel__logo:hover .teckform-logo-carousel__image {
+	opacity: var(--teckform-logos-hover-opacity, 1);
+}
+
+.teckform-logo-carousel--grayscale .teckform-logo-carousel__image {
+	filter: grayscale(1);
+	opacity: var(--teckform-logos-opacity, 0.55);
+}
+
+.teckform-logo-carousel--grayscale .teckform-logo-carousel__logo:hover .teckform-logo-carousel__image {
+	filter: none;
+	opacity: var(--teckform-logos-hover-opacity, 1);
+}
+
+.teckform-logo-carousel__placeholder {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 120px;
+	height: var(--teckform-logos-height);
+	padding: 0 16px;
+	border: 1px dashed var(--teckform-border);
+	border-radius: 8px;
+	color: var(--teckform-muted);
+	font-size: 0.875rem;
+	font-weight: 600;
+}
+
+/* Marquee: two identical groups side by side; sliding by half the track
+   puts the second group exactly where the first one started. */
+.teckform-logo-carousel__viewport {
+	overflow: hidden;
+}
+
+.teckform-logo-carousel--fade .teckform-logo-carousel__viewport {
+	-webkit-mask-image: linear-gradient(to right, transparent, #000 var(--teckform-logos-fade), #000 calc(100% - var(--teckform-logos-fade)), transparent);
+	mask-image: linear-gradient(to right, transparent, #000 var(--teckform-logos-fade), #000 calc(100% - var(--teckform-logos-fade)), transparent);
+}
+
+.teckform-logo-carousel__track {
+	display: flex;
+	width: max-content;
+	animation: teckform-logos-scroll var(--teckform-logos-duration, 40s) linear infinite;
+}
+
+.teckform-logo-carousel--reverse .teckform-logo-carousel__track {
+	animation-direction: reverse;
+}
+
+.teckform-logo-carousel--pause-hover .teckform-logo-carousel__viewport:hover .teckform-logo-carousel__track {
+	animation-play-state: paused;
+}
+
+.teckform-logo-carousel__group {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	gap: var(--teckform-logos-gap, 64px);
+	margin: 0;
+	padding: 0;
+	padding-inline-end: var(--teckform-logos-gap, 64px);
+	list-style: none;
+}
+
+@keyframes teckform-logos-scroll {
+	to {
+		transform: translateX(var(--teckform-logos-shift));
+	}
+}
+
+/* Grid */
+.teckform-logo-carousel__grid {
+	display: grid;
+	grid-template-columns: repeat(var(--teckform-logos-columns, 5), minmax(0, 1fr));
+	gap: var(--teckform-logos-gap, 24px);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.teckform-logo-carousel__grid .teckform-logo-carousel__logo {
+	min-width: 0;
+	padding: 16px;
+}
+
+.teckform-logo-carousel__grid .teckform-logo-carousel__image {
+	max-width: 100%;
+}
+
+/* Less motion: the logos stand still and wrap, each shown once. */
+@media (prefers-reduced-motion: reduce) {
+	.teckform-logo-carousel__track {
+		width: auto;
+		animation: none;
+	}
+
+	.teckform-logo-carousel--fade .teckform-logo-carousel__viewport {
+		-webkit-mask-image: none;
+		mask-image: none;
+	}
+
+	.teckform-logo-carousel__group {
+		flex: 1 1 auto;
+		flex-wrap: wrap;
+		justify-content: center;
+		row-gap: 24px;
+		padding-inline-end: 0;
+	}
+
+	.teckform-logo-carousel__group[aria-hidden="true"],
+	.teckform-logo-carousel__group > [aria-hidden="true"] {
+		display: none;
+	}
+
+	.teckform-logo-carousel *,
+	.teckform-logo-carousel *::before,
+	.teckform-logo-carousel *::after {
+		transition: none !important;
+	}
+}
+
+@media (max-width: 767px) {
+	.teckform-logo-carousel {
+		--teckform-logos-fade: 8%;
+	}
+
+	.teckform-logo-carousel__group {
+		gap: var(--teckform-logos-gap, 40px);
+		padding-inline-end: var(--teckform-logos-gap, 40px);
+	}
+}

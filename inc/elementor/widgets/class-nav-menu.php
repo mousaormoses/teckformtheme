@@ -22,6 +22,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Nav_Menu extends Widget_Base {
 
+	/**
+	 * Whether submenu arrow buttons are printed in the current render.
+	 *
+	 * @var bool
+	 */
+	private $show_toggles = false;
+
+	/**
+	 * Whether mega menus are shown in the current render (horizontal layout only).
+	 *
+	 * @var bool
+	 */
+	private $mega_menus = false;
+
 	public function get_name() {
 		return 'teckform-nav-menu';
 	}
@@ -69,6 +83,7 @@ class Nav_Menu extends Widget_Base {
 		$this->register_content_controls();
 		$this->register_menu_style_controls();
 		$this->register_dropdown_style_controls();
+		$this->register_mega_style_controls();
 		$this->register_mobile_style_controls();
 	}
 
@@ -130,6 +145,23 @@ class Nav_Menu extends Widget_Base {
 			'type'         => Controls_Manager::SWITCHER,
 			'default'      => 'yes',
 			'return_value' => 'yes',
+		) );
+
+		$this->add_control( 'mega_width', array(
+			'label'       => esc_html__( 'Mega Menu Width', 'teckform' ),
+			'type'        => Controls_Manager::SELECT,
+			'default'     => 'container',
+			'options'     => array(
+				'container' => esc_html__( 'Same as the header content', 'teckform' ),
+				'full'      => esc_html__( 'Full screen width', 'teckform' ),
+				'custom'    => esc_html__( 'Custom (centered under the item)', 'teckform' ),
+			),
+			'description' => sprintf(
+				/* translators: %s: link to the Menus screen. */
+				esc_html__( 'Give a menu item a mega menu in %s: pick a Section template under "Mega menu".', 'teckform' ),
+				'<a href="' . esc_url( admin_url( 'nav-menus.php' ) ) . '" target="_blank">' . esc_html__( 'Appearance > Menus', 'teckform' ) . '</a>'
+			),
+			'condition'   => array( 'layout' => 'horizontal' ),
 		) );
 
 		$this->add_control( 'breakpoint', array(
@@ -457,6 +489,69 @@ class Nav_Menu extends Widget_Base {
 		$this->end_controls_section();
 	}
 
+	private function register_mega_style_controls() {
+		$this->start_controls_section( 'section_style_mega', array(
+			'label'     => esc_html__( 'Mega Menu', 'teckform' ),
+			'tab'       => Controls_Manager::TAB_STYLE,
+			'condition' => array( 'layout' => 'horizontal' ),
+		) );
+
+		$this->add_responsive_control( 'mega_custom_width', array(
+			'label'      => esc_html__( 'Width', 'teckform' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( 'px' ),
+			'range'      => array(
+				'px' => array(
+					'min' => 240,
+					'max' => 1400,
+				),
+			),
+			'condition'  => array( 'mega_width' => 'custom' ),
+			'selectors'  => array(
+				'{{WRAPPER}} .teckform-nav' => '--teckform-mega-size: {{SIZE}}{{UNIT}};',
+			),
+		) );
+
+		$this->add_control( 'mega_bg', array(
+			'label'     => esc_html__( 'Background Color', 'teckform' ),
+			'type'      => Controls_Manager::COLOR,
+			'selectors' => array(
+				'{{WRAPPER}} .teckform-nav__mega' => 'background-color: {{VALUE}};',
+			),
+		) );
+
+		$this->add_responsive_control( 'mega_padding', array(
+			'label'      => esc_html__( 'Padding', 'teckform' ),
+			'type'       => Controls_Manager::DIMENSIONS,
+			'size_units' => array( 'px' ),
+			'selectors'  => array(
+				'{{WRAPPER}} .teckform-nav__mega' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+			),
+		) );
+
+		$this->add_control( 'mega_radius', array(
+			'label'      => esc_html__( 'Border Radius', 'teckform' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => array( 'px' ),
+			'range'      => array(
+				'px' => array(
+					'min' => 0,
+					'max' => 30,
+				),
+			),
+			'selectors'  => array(
+				'{{WRAPPER}} .teckform-nav__mega' => 'border-radius: {{SIZE}}{{UNIT}};',
+			),
+		) );
+
+		$this->add_group_control( Group_Control_Box_Shadow::get_type(), array(
+			'name'     => 'mega_shadow',
+			'selector' => '{{WRAPPER}} .teckform-nav__mega',
+		) );
+
+		$this->end_controls_section();
+	}
+
 	private function register_mobile_style_controls() {
 		$this->start_controls_section( 'section_style_mobile', array(
 			'label'     => esc_html__( 'Mobile Menu', 'teckform' ),
@@ -586,9 +681,11 @@ class Nav_Menu extends Widget_Base {
 		// Vertical menus show their submenus inline, so they never need the arrow buttons.
 		$arrows = 'horizontal' === $layout && 'yes' === $settings['show_arrows'];
 
-		if ( $arrows || $has_mobile ) {
-			add_filter( 'walker_nav_menu_start_el', array( $this, 'add_submenu_toggle' ), 10, 2 );
-		}
+		$this->show_toggles = $arrows || $has_mobile;
+		$this->mega_menus   = 'horizontal' === $layout && function_exists( 'teckform_get_mega_menu_id' );
+
+		add_filter( 'walker_nav_menu_start_el', array( $this, 'add_submenu_toggle' ), 10, 2 );
+		add_filter( 'nav_menu_css_class', array( $this, 'add_mega_class' ), 10, 2 );
 
 		$menu_html = wp_nav_menu( array(
 			'menu'        => $menu,
@@ -600,6 +697,7 @@ class Nav_Menu extends Widget_Base {
 		) );
 
 		remove_filter( 'walker_nav_menu_start_el', array( $this, 'add_submenu_toggle' ), 10 );
+		remove_filter( 'nav_menu_css_class', array( $this, 'add_mega_class' ), 10 );
 
 		$classes = array(
 			'teckform-nav',
@@ -619,7 +717,7 @@ class Nav_Menu extends Widget_Base {
 			$classes[] = 'teckform-nav--panel-left';
 		}
 		?>
-		<nav class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" aria-label="<?php echo esc_attr( $menu->name ); ?>">
+		<nav class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" aria-label="<?php echo esc_attr( $menu->name ); ?>" data-mega-width="<?php echo esc_attr( $settings['mega_width'] ); ?>">
 			<?php if ( $has_mobile ) : ?>
 				<button type="button" class="teckform-nav__toggle" aria-expanded="false" aria-controls="<?php echo esc_attr( $panel_id ); ?>" aria-label="<?php esc_attr_e( 'Open menu', 'teckform' ); ?>">
 					<?php
@@ -651,13 +749,37 @@ class Nav_Menu extends Widget_Base {
 	 * @return string
 	 */
 	public function add_submenu_toggle( $item_output, $item ) {
-		if ( ! in_array( 'menu-item-has-children', (array) $item->classes, true ) ) {
+		$mega = $this->mega_menus ? teckform_get_mega_menu_id( $item ) : 0;
+
+		if ( ! $mega && ! in_array( 'menu-item-has-children', (array) $item->classes, true ) ) {
 			return $item_output;
 		}
 
-		/* translators: %s: menu item title. */
-		$label = sprintf( __( 'Show submenu for %s', 'teckform' ), wp_strip_all_tags( $item->title ) );
+		if ( $this->show_toggles || $mega ) {
+			/* translators: %s: menu item title. */
+			$label        = sprintf( __( 'Show submenu for %s', 'teckform' ), wp_strip_all_tags( $item->title ) );
+			$item_output .= '<button type="button" class="teckform-nav__sub-toggle" aria-expanded="false" aria-label="' . esc_attr( $label ) . '"></button>';
+		}
 
-		return $item_output . '<button type="button" class="teckform-nav__sub-toggle" aria-expanded="false" aria-label="' . esc_attr( $label ) . '"></button>';
+		if ( $mega ) {
+			$item_output .= '<div class="teckform-nav__mega">' . teckform_get_template_content( $mega ) . '</div>';
+		}
+
+		return $item_output;
+	}
+
+	/**
+	 * Mark top-level items that show a mega menu.
+	 *
+	 * @param string[] $classes Menu item classes.
+	 * @param \WP_Post $item    Menu item.
+	 * @return string[]
+	 */
+	public function add_mega_class( $classes, $item ) {
+		if ( $this->mega_menus && teckform_get_mega_menu_id( $item ) ) {
+			$classes[] = 'teckform-has-mega';
+		}
+
+		return $classes;
 	}
 }

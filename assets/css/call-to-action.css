@@ -1,0 +1,305 @@
+/* Teckform Call to Action widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-cta {
+	--teckform-cta-gap: 48px;
+	--teckform-cta-justify: center;
+	--teckform-cta-margin: auto;
+	position: relative;
+	z-index: 0;
+	isolation: isolate;
+	display: flex;
+	align-items: center;
+	max-width: 1140px;
+	margin-inline: auto;
+	padding: 72px 56px;
+	overflow: hidden;
+	border-radius: 24px;
+	background-color: var(--teckform-cta-bg);
+	color: var(--teckform-cta-text);
+}
+
+/* Color styles. Each one only sets variables, so the Style tab can override any of them. */
+.teckform-cta--scheme-accent {
+	--teckform-cta-bg: var(--teckform-accent);
+	--teckform-cta-text: var(--teckform-on-accent, #fff);
+	--teckform-cta-muted: color-mix(in srgb, var(--teckform-on-accent, #fff) 82%, transparent);
+	--teckform-cta-pattern: color-mix(in srgb, var(--teckform-on-accent, #fff) 16%, transparent);
+	--teckform-cta-eyebrow-bg: color-mix(in srgb, var(--teckform-on-accent, #fff) 14%, transparent);
+	--teckform-cta-primary-bg: var(--teckform-on-accent, #fff);
+	--teckform-cta-primary-text: var(--teckform-accent);
+	--teckform-cta-secondary-border: color-mix(in srgb, var(--teckform-on-accent, #fff) 45%, transparent);
+}
+
+.teckform-cta--scheme-surface {
+	--teckform-cta-bg: var(--teckform-surface);
+	--teckform-cta-text: var(--teckform-text);
+	--teckform-cta-muted: var(--teckform-muted);
+	--teckform-cta-pattern: var(--teckform-border);
+	--teckform-cta-eyebrow-bg: color-mix(in srgb, var(--teckform-accent) 10%, transparent);
+	--teckform-cta-eyebrow-text: var(--teckform-accent);
+	--teckform-cta-primary-bg: var(--teckform-accent);
+	--teckform-cta-primary-text: var(--teckform-on-accent, #fff);
+	--teckform-cta-secondary-border: var(--teckform-border);
+	border: 1px solid var(--teckform-border);
+}
+
+/* Text and page colors swapped, so it is dark on a light page and light in dark mode. */
+.teckform-cta--scheme-contrast {
+	--teckform-cta-bg: var(--teckform-text);
+	--teckform-cta-text: var(--teckform-bg);
+	--teckform-cta-muted: color-mix(in srgb, var(--teckform-bg) 75%, transparent);
+	--teckform-cta-pattern: color-mix(in srgb, var(--teckform-bg) 12%, transparent);
+	--teckform-cta-eyebrow-bg: color-mix(in srgb, var(--teckform-bg) 12%, transparent);
+	--teckform-cta-primary-bg: var(--teckform-accent);
+	--teckform-cta-primary-text: var(--teckform-on-accent, #fff);
+	--teckform-cta-secondary-border: color-mix(in srgb, var(--teckform-bg) 35%, transparent);
+}
+
+/* Over a photo the text is always light. */
+.teckform-cta--has-image {
+	--teckform-cta-text: #fff;
+	--teckform-cta-muted: rgba(255, 255, 255, 0.85);
+	--teckform-cta-pattern: rgba(255, 255, 255, 0.14);
+	--teckform-cta-eyebrow-bg: rgba(255, 255, 255, 0.14);
+	--teckform-cta-eyebrow-text: #fff;
+	--teckform-cta-secondary-border: rgba(255, 255, 255, 0.5);
+}
+
+/* Background image and overlay */
+.teckform-cta__background {
+	position: absolute;
+	inset: 0;
+	z-index: -2;
+}
+
+.teckform-cta .teckform-cta__bg-image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+	object-fit: cover;
+}
+
+.teckform-cta__overlay {
+	position: absolute;
+	inset: 0;
+	background: #0f172a;
+	opacity: 0.6;
+}
+
+/* Decorative patterns, same family as the Hero's. */
+.teckform-cta[class*="teckform-cta--pattern-"]::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+}
+
+.teckform-cta--pattern-grid::before {
+	background-image:
+		linear-gradient(var(--teckform-cta-pattern) 1px, transparent 1px),
+		linear-gradient(90deg, var(--teckform-cta-pattern) 1px, transparent 1px);
+	background-position: center;
+	background-size: 48px 48px;
+	-webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, #000 20%, transparent 100%);
+	mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, #000 20%, transparent 100%);
+}
+
+.teckform-cta--pattern-dots::before {
+	background-image: radial-gradient(var(--teckform-cta-pattern) 1.5px, transparent 1.5px);
+	background-position: center;
+	background-size: 22px 22px;
+	-webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, #000 20%, transparent 100%);
+	mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, #000 20%, transparent 100%);
+}
+
+.teckform-cta--pattern-glow::before {
+	background:
+		radial-gradient(45% 70% at 10% 0%, color-mix(in srgb, var(--teckform-cta-pattern) 100%, transparent), transparent),
+		radial-gradient(40% 60% at 95% 100%, color-mix(in srgb, var(--teckform-cta-pattern) 80%, transparent), transparent);
+}
+
+/* Content */
+.teckform-cta__inner {
+	position: relative;
+	width: 100%;
+	text-align: center;
+}
+
+.teckform-cta__content {
+	max-width: 720px;
+	margin-inline: var(--teckform-cta-margin);
+}
+
+.teckform-cta .teckform-cta__eyebrow {
+	display: inline-block;
+	margin: 0 0 16px;
+	padding: 5px 14px;
+	border-radius: 999px;
+	background: var(--teckform-cta-eyebrow-bg);
+	color: var(--teckform-cta-eyebrow-text, var(--teckform-cta-text));
+	font-size: 0.8125rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	line-height: 1.4;
+}
+
+.teckform-cta .teckform-cta__title {
+	margin: 0 0 16px;
+	color: var(--teckform-cta-text);
+	font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+	font-weight: 700;
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+}
+
+.teckform-cta .teckform-cta__description {
+	margin: 0;
+	color: var(--teckform-cta-muted);
+	font-size: 1.125rem;
+	line-height: 1.7;
+}
+
+/* Buttons */
+.teckform-cta .teckform-cta__buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: var(--teckform-cta-justify);
+	gap: 12px;
+	margin-top: 32px;
+}
+
+.teckform-cta .teckform-cta__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 14px 26px;
+	border: 1px solid transparent;
+	border-radius: 10px;
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.teckform-cta .teckform-cta__button:hover {
+	transform: translateY(-1px);
+}
+
+.teckform-cta .teckform-cta__button:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 3px;
+}
+
+.teckform-cta .teckform-cta__button--primary {
+	border-color: var(--teckform-cta-primary-bg);
+	background: var(--teckform-cta-primary-bg);
+	color: var(--teckform-cta-primary-text);
+}
+
+.teckform-cta .teckform-cta__button--primary:hover,
+.teckform-cta .teckform-cta__button--primary:focus-visible {
+	border-color: color-mix(in srgb, var(--teckform-cta-primary-bg) 88%, var(--teckform-cta-primary-text));
+	background: color-mix(in srgb, var(--teckform-cta-primary-bg) 88%, var(--teckform-cta-primary-text));
+	color: var(--teckform-cta-primary-text);
+}
+
+.teckform-cta .teckform-cta__button--secondary {
+	border-color: var(--teckform-cta-secondary-border);
+	background: transparent;
+	color: var(--teckform-cta-text);
+}
+
+.teckform-cta .teckform-cta__button--secondary:hover,
+.teckform-cta .teckform-cta__button--secondary:focus-visible {
+	border-color: currentColor;
+	color: var(--teckform-cta-text);
+}
+
+.teckform-cta .teckform-cta__button-icon {
+	display: inline-flex;
+	transition: transform 0.2s ease;
+}
+
+.teckform-cta .teckform-cta__button:hover .teckform-cta__button-icon {
+	transform: translateX(3px);
+}
+
+[dir="rtl"] .teckform-cta__button-icon {
+	transform: scaleX(-1);
+}
+
+[dir="rtl"] .teckform-cta__button:hover .teckform-cta__button-icon {
+	transform: scaleX(-1) translateX(3px);
+}
+
+.teckform-cta .teckform-cta__button-icon svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+/* Split layout: text at the start, buttons at the end. */
+.teckform-cta--split .teckform-cta__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--teckform-cta-gap);
+	text-align: start;
+}
+
+.teckform-cta--split .teckform-cta__content {
+	flex: 1 1 auto;
+	margin: 0;
+}
+
+.teckform-cta--split .teckform-cta__buttons {
+	flex: 0 0 auto;
+	justify-content: flex-end;
+	margin-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-cta *,
+	.teckform-cta *::before,
+	.teckform-cta *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+@media (max-width: 1024px) {
+	.teckform-cta {
+		padding: 56px 40px;
+	}
+}
+
+/* Phone: split stacks, buttons fill the width. */
+@media (max-width: 767px) {
+	.teckform-cta {
+		padding: 48px 24px;
+		border-radius: 18px;
+	}
+
+	.teckform-cta--split .teckform-cta__inner {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.teckform-cta--split .teckform-cta__buttons {
+		justify-content: flex-start;
+	}
+
+	.teckform-cta .teckform-cta__description {
+		font-size: 1rem;
+	}
+
+	.teckform-cta .teckform-cta__buttons {
+		flex-direction: column;
+		align-items: stretch;
+	}
+}

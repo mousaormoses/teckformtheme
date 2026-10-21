@@ -126,10 +126,12 @@ function teckform_render_template_meta_box( $post ) {
 				<select id="teckform-type" name="teckform_type">
 					<option value="header" <?php selected( $type, 'header' ); ?>><?php esc_html_e( 'Header', 'teckform' ); ?></option>
 					<option value="footer" <?php selected( $type, 'footer' ); ?>><?php esc_html_e( 'Footer', 'teckform' ); ?></option>
+					<option value="section" <?php selected( $type, 'section' ); ?>><?php esc_html_e( 'Section (for popups and mega menus)', 'teckform' ); ?></option>
 				</select>
+				<p class="description teckform-row-section-note"><?php esc_html_e( 'Sections are not shown on their own. Choose them in a Popup widget or as a mega menu in Appearance > Menus.', 'teckform' ); ?></p>
 			</td>
 		</tr>
-		<tr>
+		<tr class="teckform-row-rules">
 			<th scope="row"><label for="teckform-display"><?php esc_html_e( 'Display on', 'teckform' ); ?></label></th>
 			<td>
 				<select id="teckform-display" name="teckform_display">
@@ -140,7 +142,7 @@ function teckform_render_template_meta_box( $post ) {
 				<p class="description"><?php esc_html_e( 'When several templates match a page, the most specific one wins: specific pages, then front page, then entire site.', 'teckform' ); ?></p>
 			</td>
 		</tr>
-		<tr class="teckform-row-pages">
+		<tr class="teckform-row-rules teckform-row-pages">
 			<th scope="row"><label for="teckform-include"><?php esc_html_e( 'Pages', 'teckform' ); ?></label></th>
 			<td>
 				<select id="teckform-include" name="teckform_include[]" multiple size="8" style="min-width: 320px;">
@@ -151,7 +153,7 @@ function teckform_render_template_meta_box( $post ) {
 				<p class="description"><?php esc_html_e( 'Hold Ctrl (Cmd on Mac) to select more than one page.', 'teckform' ); ?></p>
 			</td>
 		</tr>
-		<tr>
+		<tr class="teckform-row-rules">
 			<th scope="row"><label for="teckform-exclude"><?php esc_html_e( 'Hide on', 'teckform' ); ?></label></th>
 			<td>
 				<select id="teckform-exclude" name="teckform_exclude[]" multiple size="8" style="min-width: 320px;">
@@ -217,7 +219,9 @@ function teckform_template_admin_assets( $hook_suffix ) {
 
 			function update() {
 				$( '.teckform-row-header' ).toggle( 'header' === type.val() );
-				$( '.teckform-row-pages' ).toggle( 'pages' === display.val() );
+				$( '.teckform-row-rules' ).toggle( 'section' !== type.val() );
+				$( '.teckform-row-section-note' ).toggle( 'section' === type.val() );
+				$( '.teckform-row-pages' ).toggle( 'section' !== type.val() && 'pages' === display.val() );
 			}
 
 			type.add( display ).on( 'change', update );
@@ -243,7 +247,8 @@ function teckform_save_template_settings( $post_id ) {
 		return;
 	}
 
-	$type    = isset( $_POST['teckform_type'] ) && 'footer' === $_POST['teckform_type'] ? 'footer' : 'header';
+	$type    = isset( $_POST['teckform_type'] ) ? sanitize_key( wp_unslash( $_POST['teckform_type'] ) ) : 'header';
+	$type    = in_array( $type, array( 'header', 'footer', 'section' ), true ) ? $type : 'header';
 	$display = isset( $_POST['teckform_display'] ) ? sanitize_key( wp_unslash( $_POST['teckform_display'] ) ) : 'entire';
 
 	if ( ! array_key_exists( $display, teckform_template_display_options() ) ) {
@@ -291,8 +296,21 @@ add_filter( 'manage_teckform_template_posts_columns', 'teckform_template_columns
  * @param int    $post_id Template ID.
  */
 function teckform_template_column_content( $column, $post_id ) {
+	$type = get_post_meta( $post_id, '_teckform_type', true );
+
 	if ( 'teckform_type' === $column ) {
-		echo esc_html( 'footer' === get_post_meta( $post_id, '_teckform_type', true ) ? __( 'Footer', 'teckform' ) : __( 'Header', 'teckform' ) );
+		$types = array(
+			'header'  => __( 'Header', 'teckform' ),
+			'footer'  => __( 'Footer', 'teckform' ),
+			'section' => __( 'Section', 'teckform' ),
+		);
+
+		echo esc_html( $types[ $type ] ?? $types['header'] );
+	}
+
+	if ( 'teckform_display' === $column && 'section' === $type ) {
+		echo esc_html__( 'Used by popups and mega menus', 'teckform' );
+		return;
 	}
 
 	if ( 'teckform_display' === $column ) {
@@ -535,6 +553,55 @@ function teckform_enqueue_template_styles() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'teckform_enqueue_template_styles' );
+
+/**
+ * Published Section templates, for picking one in a widget or menu item.
+ *
+ * @return array<int, string> Template ID => title.
+ */
+function teckform_get_section_templates() {
+	$options = array();
+
+	$sections = get_posts( array(
+		'post_type'      => 'teckform_template',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'meta_key'       => '_teckform_type',
+		'meta_value'     => 'section',
+		'orderby'        => 'title',
+		'order'          => 'ASC',
+	) );
+
+	foreach ( $sections as $section ) {
+		$options[ $section->ID ] = $section->post_title;
+	}
+
+	return $options;
+}
+
+/**
+ * HTML of a template designed in Elementor, with its CSS inline, for use inside
+ * other content (popups, mega menus).
+ *
+ * @param int $template_id Template ID.
+ * @return string
+ */
+function teckform_get_template_content( $template_id ) {
+	static $rendering = array();
+
+	$template_id = absint( $template_id );
+
+	// A template that shows itself (e.g. a popup inside its own section) would loop forever.
+	if ( ! $template_id || isset( $rendering[ $template_id ] ) || ! did_action( 'elementor/loaded' ) || 'teckform_template' !== get_post_type( $template_id ) || 'publish' !== get_post_status( $template_id ) ) {
+		return '';
+	}
+
+	$rendering[ $template_id ] = true;
+	$html                      = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template_id, true );
+	unset( $rendering[ $template_id ] );
+
+	return $html;
+}
 
 /**
  * Print the matching header or footer template.

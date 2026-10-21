@@ -1,0 +1,230 @@
+/* Teckform Before / After widget. Colors and sizes set in the Style tab override these defaults.
+ *
+ * --teckform-ba-position is how much of the Before image shows, measured from the
+ * start edge (left, or right on right-to-left sites) or from the top. */
+
+.teckform-before-after {
+	--teckform-ba-position: 50%;
+	--teckform-ba-line: var(--teckform-surface);
+	--teckform-ba-line-width: 2px;
+	--teckform-ba-knob: 44px;
+	--teckform-ba-label-offset: 16px;
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+	border-radius: 12px;
+	cursor: ew-resize;
+	touch-action: pan-y;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.teckform-before-after--vertical {
+	cursor: ns-resize;
+	touch-action: pan-x;
+}
+
+.teckform-before-after__after {
+	height: 100%;
+}
+
+/* Prefixed with the root class to beat Elementor's `.elementor img { height: auto }`. */
+.teckform-before-after .teckform-before-after__image {
+	display: block;
+	width: 100%;
+	max-width: none;
+	height: 100%;
+	object-fit: cover;
+	pointer-events: none;
+	-webkit-user-drag: none;
+}
+
+.teckform-before-after__before {
+	position: absolute;
+	inset: 0;
+	clip-path: inset(0 calc(100% - var(--teckform-ba-position)) 0 0);
+}
+
+[dir="rtl"] .teckform-before-after--horizontal .teckform-before-after__before {
+	clip-path: inset(0 0 0 calc(100% - var(--teckform-ba-position)));
+}
+
+.teckform-before-after--vertical .teckform-before-after__before {
+	clip-path: inset(0 0 calc(100% - var(--teckform-ba-position)) 0);
+}
+
+/* Handle: a line with a round knob in the middle. */
+.teckform-before-after__handle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	z-index: 2;
+	inset-inline-start: var(--teckform-ba-position);
+	width: 0;
+	pointer-events: none;
+}
+
+.teckform-before-after__handle::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	inset-inline-start: calc(var(--teckform-ba-line-width) / -2);
+	width: var(--teckform-ba-line-width);
+	background: var(--teckform-ba-line);
+	box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+	transition: background-color 0.2s ease;
+}
+
+.teckform-before-after__knob {
+	position: absolute;
+	top: calc(50% - var(--teckform-ba-knob) / 2);
+	inset-inline-start: calc(var(--teckform-ba-knob) / -2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--teckform-ba-knob);
+	height: var(--teckform-ba-knob);
+	border: 2px solid var(--teckform-ba-line);
+	border-radius: 50%;
+	background-color: var(--teckform-surface);
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+	color: var(--teckform-accent);
+	transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.teckform-before-after.is-dragging .teckform-before-after__knob {
+	transform: scale(1.08);
+}
+
+.teckform-before-after__knob svg {
+	width: 55%;
+	height: 55%;
+	fill: currentColor;
+}
+
+.teckform-before-after--vertical .teckform-before-after__handle {
+	top: var(--teckform-ba-position);
+	bottom: auto;
+	inset-inline: 0;
+	width: auto;
+	height: 0;
+}
+
+.teckform-before-after--vertical .teckform-before-after__handle::before {
+	top: calc(var(--teckform-ba-line-width) / -2);
+	bottom: auto;
+	inset-inline: 0;
+	width: auto;
+	height: var(--teckform-ba-line-width);
+}
+
+.teckform-before-after--vertical .teckform-before-after__knob {
+	top: calc(var(--teckform-ba-knob) / -2);
+	inset-inline-start: calc(50% - var(--teckform-ba-knob) / 2);
+}
+
+.teckform-before-after--vertical .teckform-before-after__knob svg {
+	transform: rotate(90deg);
+}
+
+/* The real slider: hidden from sight, still reachable with the keyboard.
+   Its focus ring is drawn on the knob. */
+.teckform-before-after__range {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+	white-space: nowrap;
+	opacity: 0;
+}
+
+.teckform-before-after__range:focus-visible ~ .teckform-before-after__handle .teckform-before-after__knob {
+	outline: 3px solid var(--teckform-accent);
+	outline-offset: 3px;
+}
+
+/* Labels */
+.teckform-before-after__label {
+	position: absolute;
+	z-index: 1;
+	padding: 6px 12px;
+	border-radius: 999px;
+	background-color: color-mix(in srgb, var(--teckform-text) 72%, transparent);
+	color: var(--teckform-bg);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	line-height: 1.2;
+	white-space: nowrap;
+	pointer-events: none;
+	transition: opacity 0.2s ease;
+}
+
+.teckform-before-after__label.is-covered {
+	opacity: 0;
+}
+
+.teckform-before-after--labels-hover .teckform-before-after__label {
+	opacity: 0;
+}
+
+.teckform-before-after--labels-hover:hover .teckform-before-after__label:not(.is-covered),
+.teckform-before-after--labels-hover:focus-within .teckform-before-after__label:not(.is-covered) {
+	opacity: 1;
+}
+
+/* Side by side: Before at the start edge, After at the end edge. */
+.teckform-before-after--horizontal .teckform-before-after__label--before {
+	inset-inline-start: var(--teckform-ba-label-offset);
+}
+
+.teckform-before-after--horizontal .teckform-before-after__label--after {
+	inset-inline-end: var(--teckform-ba-label-offset);
+}
+
+.teckform-before-after--horizontal.teckform-before-after--labels-at-start .teckform-before-after__label {
+	top: var(--teckform-ba-label-offset);
+}
+
+.teckform-before-after--horizontal.teckform-before-after--labels-at-center .teckform-before-after__label {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.teckform-before-after--horizontal.teckform-before-after--labels-at-end .teckform-before-after__label {
+	bottom: var(--teckform-ba-label-offset);
+}
+
+/* Top and bottom: Before at the top, After at the bottom. */
+.teckform-before-after--vertical .teckform-before-after__label--before {
+	top: var(--teckform-ba-label-offset);
+}
+
+.teckform-before-after--vertical .teckform-before-after__label--after {
+	bottom: var(--teckform-ba-label-offset);
+}
+
+.teckform-before-after--vertical.teckform-before-after--labels-at-start .teckform-before-after__label {
+	inset-inline-start: var(--teckform-ba-label-offset);
+}
+
+.teckform-before-after--vertical.teckform-before-after--labels-at-center .teckform-before-after__label {
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.teckform-before-after--vertical.teckform-before-after--labels-at-end .teckform-before-after__label {
+	inset-inline-end: var(--teckform-ba-label-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-before-after *,
+	.teckform-before-after *::before,
+	.teckform-before-after *::after {
+		transition: none !important;
+	}
+}

@@ -47,6 +47,13 @@
 	font-size: 1.5rem;
 	font-weight: 700;
 	line-height: 1.2;
+	white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+	.teckform-logo__name {
+		font-size: 1.25rem;
+	}
 }
 
 .teckform-logo__scrolled,
@@ -195,6 +202,39 @@
 	color: var(--teckform-text);
 }
 
+/* Mega menu: a Section template as the dropdown. JS sets its left offset and width. */
+.teckform-nav__mega {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	z-index: 100;
+	width: var(--teckform-mega-size, 600px);
+	max-width: 100vw;
+	padding: 24px;
+	background: var(--teckform-surface);
+	border-radius: 8px;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+	color: var(--teckform-text);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(8px);
+	transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
+}
+
+.teckform-nav__menu li.teckform-has-mega:hover > .teckform-nav__mega,
+.teckform-nav__menu li.teckform-has-mega:focus-within > .teckform-nav__mega,
+.teckform-nav__menu li.teckform-has-mega.is-open > .teckform-nav__mega {
+	opacity: 1;
+	visibility: visible;
+	transform: none;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* A mega menu replaces the item's normal dropdown. */
+.teckform-nav__menu li.teckform-has-mega > .sub-menu {
+	display: none;
+}
+
 /* Vertical layout (e.g. footer link lists): submenus are shown indented below their parent. */
 .teckform-nav--vertical .teckform-nav__menu {
 	flex-direction: column;
@@ -331,6 +371,23 @@ body.teckform-no-scroll {
 	.teckform-nav--break-tablet .teckform-nav__menu li.is-open > .sub-menu {
 		display: block;
 	}
+
+	.teckform-nav--break-tablet .teckform-nav__mega {
+		position: static;
+		display: none;
+		flex-basis: 100%;
+		width: auto !important;
+		padding: 8px 0;
+		background: none;
+		box-shadow: none;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
+
+	.teckform-nav--break-tablet .teckform-nav__menu li.is-open > .teckform-nav__mega {
+		display: block;
+	}
 }
 
 @media (max-width: 767px) {
@@ -403,6 +460,23 @@ body.teckform-no-scroll {
 	}
 
 	.teckform-nav--break-mobile .teckform-nav__menu li.is-open > .sub-menu {
+		display: block;
+	}
+
+	.teckform-nav--break-mobile .teckform-nav__mega {
+		position: static;
+		display: none;
+		flex-basis: 100%;
+		width: auto !important;
+		padding: 8px 0;
+		background: none;
+		box-shadow: none;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
+
+	.teckform-nav--break-mobile .teckform-nav__menu li.is-open > .teckform-nav__mega {
 		display: block;
 	}
 }
