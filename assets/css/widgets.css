@@ -6,7 +6,7 @@
 	margin-bottom: 16px;
 	font-size: 40px;
 	line-height: 1;
-	color: #2563eb;
+	color: var(--teckform-accent);
 }
 
 .teckform-feature-box__icon svg {
@@ -26,4 +26,472 @@
 
 .teckform-feature-box__description {
 	margin: 0;
+}
+
+/* Site Logo */
+.teckform-logo__link {
+	display: inline-flex;
+	align-items: center;
+	color: inherit;
+	text-decoration: none;
+}
+
+.teckform-logo img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	transition: width 0.3s ease, opacity 0.2s ease;
+}
+
+.teckform-logo__name {
+	font-size: 1.5rem;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.teckform-logo__scrolled,
+.teckform-header.is-scrolled .teckform-logo--has-scrolled .teckform-logo__default {
+	display: none;
+}
+
+.teckform-header.is-scrolled .teckform-logo--has-scrolled .teckform-logo__scrolled {
+	display: block;
+}
+
+/* Nav Menu */
+.teckform-nav {
+	display: flex;
+	align-items: center;
+	justify-content: var(--teckform-nav-align, flex-start);
+}
+
+.teckform-nav__panel {
+	flex: 1 1 auto;
+}
+
+.teckform-nav__menu,
+.teckform-nav__menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.teckform-nav__menu {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: var(--teckform-nav-align, flex-start);
+	column-gap: var(--teckform-nav-gap, 28px);
+}
+
+.teckform-nav__menu li {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.teckform-nav__menu a {
+	display: block;
+	padding: 10px 0;
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.teckform-nav__sub-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	margin-inline-start: 4px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: inherit;
+	cursor: pointer;
+}
+
+.teckform-nav__sub-toggle::before {
+	content: "";
+	width: 6px;
+	height: 6px;
+	border-right: 2px solid;
+	border-bottom: 2px solid;
+	transform: translateY(-2px) rotate(45deg);
+	transition: transform 0.2s ease;
+}
+
+.teckform-nav__menu .is-open > .teckform-nav__sub-toggle::before {
+	transform: translateY(1px) rotate(225deg);
+}
+
+.teckform-nav--no-arrows .teckform-nav__sub-toggle {
+	display: none;
+}
+
+/* Hover underline */
+.teckform-nav--pointer-underline .teckform-nav__menu > li > a {
+	position: relative;
+}
+
+.teckform-nav--pointer-underline .teckform-nav__menu > li > a::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	bottom: 4px;
+	left: 0;
+	height: var(--teckform-nav-pointer-height, 2px);
+	background: var(--teckform-nav-pointer, currentColor);
+	transform: scaleX(0);
+	transition: transform 0.2s ease;
+}
+
+.teckform-nav--pointer-underline .teckform-nav__menu > li > a:hover::after,
+.teckform-nav--pointer-underline .teckform-nav__menu > li.current-menu-item > a::after,
+.teckform-nav--pointer-underline .teckform-nav__menu > li.current-menu-ancestor > a::after {
+	transform: scaleX(1);
+}
+
+/* Dropdowns */
+.teckform-nav__menu .sub-menu {
+	position: absolute;
+	top: 100%;
+	inset-inline-start: 0;
+	z-index: 100;
+	min-width: 220px;
+	padding: 8px 0;
+	background: var(--teckform-surface);
+	border-radius: 6px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(8px);
+	transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
+}
+
+.teckform-nav__menu .sub-menu .sub-menu {
+	top: -8px;
+	inset-inline-start: 100%;
+}
+
+.teckform-nav__menu li:hover > .sub-menu,
+.teckform-nav__menu li:focus-within > .sub-menu,
+.teckform-nav__menu li.is-open > .sub-menu {
+	opacity: 1;
+	visibility: visible;
+	transform: none;
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.teckform-nav__menu .sub-menu li {
+	width: 100%;
+}
+
+.teckform-nav__menu .sub-menu a {
+	flex: 1;
+	padding: 8px 20px;
+	color: var(--teckform-text);
+}
+
+/* Vertical layout (e.g. footer link lists): submenus are shown indented below their parent. */
+.teckform-nav--vertical .teckform-nav__menu {
+	flex-direction: column;
+	align-items: var(--teckform-nav-align, flex-start);
+	row-gap: var(--teckform-nav-gap, 4px);
+}
+
+.teckform-nav--vertical .teckform-nav__menu .sub-menu {
+	position: static;
+	flex-basis: 100%;
+	min-width: 0;
+	padding: 0;
+	padding-inline-start: 16px;
+	background: none;
+	box-shadow: none;
+	opacity: 1;
+	visibility: visible;
+	transform: none;
+}
+
+.teckform-nav--vertical .teckform-nav__menu a {
+	padding: 4px 0;
+	color: inherit;
+}
+
+/* Mobile menu toggle, close button and overlay (hidden until a breakpoint shows them) */
+.teckform-nav__toggle,
+.teckform-nav__close {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	border: 0;
+	background: none;
+	color: inherit;
+	font-size: 24px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.teckform-nav__toggle svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.teckform-nav__overlay {
+	display: none;
+}
+
+.teckform-nav--panel-left {
+	--teckform-nav-panel-left: 0;
+	--teckform-nav-panel-right: auto;
+	--teckform-nav-panel-offset: -100%;
+}
+
+body.teckform-no-scroll {
+	overflow: hidden;
+}
+
+/*
+ * Mobile menu. The same rules are repeated for each breakpoint because
+ * media queries can't use variables.
+ */
+@media (max-width: 1024px) {
+	.teckform-nav--break-tablet .teckform-nav__toggle,
+	.teckform-nav--break-tablet .teckform-nav__close,
+	.teckform-nav--break-tablet .teckform-nav__sub-toggle {
+		display: inline-flex;
+	}
+
+	.teckform-nav--break-tablet .teckform-nav__close {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		font-size: 32px;
+	}
+
+	.teckform-nav--break-tablet .teckform-nav__panel {
+		position: fixed;
+		top: var(--wp-admin--admin-bar--height, 0px);
+		right: var(--teckform-nav-panel-right, 0);
+		bottom: 0;
+		left: var(--teckform-nav-panel-left, auto);
+		z-index: 100000;
+		width: min(var(--teckform-nav-panel-width, 320px), 100vw);
+		padding: var(--teckform-nav-panel-padding, 64px 24px 24px);
+		overflow-y: auto;
+		background: var(--teckform-nav-panel-bg, var(--teckform-surface));
+		color: var(--teckform-text);
+		transform: translateX(var(--teckform-nav-panel-offset, 100%));
+		visibility: hidden;
+		transition: transform 0.3s ease, visibility 0s 0.3s;
+	}
+
+	.teckform-nav--break-tablet.is-open .teckform-nav__panel {
+		transform: none;
+		visibility: visible;
+		transition: transform 0.3s ease;
+	}
+
+	.teckform-nav--break-tablet.is-open .teckform-nav__overlay {
+		display: block;
+		position: fixed;
+		inset: 0;
+		z-index: 99999;
+		background: var(--teckform-nav-overlay, rgba(0, 0, 0, 0.5));
+	}
+
+	.teckform-nav--break-tablet .teckform-nav__menu {
+		flex-direction: column;
+		align-items: stretch;
+		row-gap: 0;
+	}
+
+	.teckform-nav--break-tablet .teckform-nav__menu li {
+		justify-content: space-between;
+	}
+
+	.teckform-nav--break-tablet .teckform-nav__menu .sub-menu {
+		position: static;
+		display: none;
+		flex-basis: 100%;
+		min-width: 0;
+		padding: 0;
+		padding-inline-start: 16px;
+		background: none;
+		box-shadow: none;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
+
+	.teckform-nav--break-tablet .teckform-nav__menu li.is-open > .sub-menu {
+		display: block;
+	}
+}
+
+@media (max-width: 767px) {
+	.teckform-nav--break-mobile .teckform-nav__toggle,
+	.teckform-nav--break-mobile .teckform-nav__close,
+	.teckform-nav--break-mobile .teckform-nav__sub-toggle {
+		display: inline-flex;
+	}
+
+	.teckform-nav--break-mobile .teckform-nav__close {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		font-size: 32px;
+	}
+
+	.teckform-nav--break-mobile .teckform-nav__panel {
+		position: fixed;
+		top: var(--wp-admin--admin-bar--height, 0px);
+		right: var(--teckform-nav-panel-right, 0);
+		bottom: 0;
+		left: var(--teckform-nav-panel-left, auto);
+		z-index: 100000;
+		width: min(var(--teckform-nav-panel-width, 320px), 100vw);
+		padding: var(--teckform-nav-panel-padding, 64px 24px 24px);
+		overflow-y: auto;
+		background: var(--teckform-nav-panel-bg, var(--teckform-surface));
+		color: var(--teckform-text);
+		transform: translateX(var(--teckform-nav-panel-offset, 100%));
+		visibility: hidden;
+		transition: transform 0.3s ease, visibility 0s 0.3s;
+	}
+
+	.teckform-nav--break-mobile.is-open .teckform-nav__panel {
+		transform: none;
+		visibility: visible;
+		transition: transform 0.3s ease;
+	}
+
+	.teckform-nav--break-mobile.is-open .teckform-nav__overlay {
+		display: block;
+		position: fixed;
+		inset: 0;
+		z-index: 99999;
+		background: var(--teckform-nav-overlay, rgba(0, 0, 0, 0.5));
+	}
+
+	.teckform-nav--break-mobile .teckform-nav__menu {
+		flex-direction: column;
+		align-items: stretch;
+		row-gap: 0;
+	}
+
+	.teckform-nav--break-mobile .teckform-nav__menu li {
+		justify-content: space-between;
+	}
+
+	.teckform-nav--break-mobile .teckform-nav__menu .sub-menu {
+		position: static;
+		display: none;
+		flex-basis: 100%;
+		min-width: 0;
+		padding: 0;
+		padding-inline-start: 16px;
+		background: none;
+		box-shadow: none;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+	}
+
+	.teckform-nav--break-mobile .teckform-nav__menu li.is-open > .sub-menu {
+		display: block;
+	}
+}
+
+/* Search */
+.teckform-search__toggle,
+.teckform-search__submit,
+.teckform-search__close {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	border: 0;
+	background: none;
+	color: inherit;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+	transition: color 0.2s ease;
+}
+
+.teckform-search svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.teckform-search__form {
+	display: flex;
+	align-items: center;
+	border: 1px solid var(--teckform-border);
+	border-radius: 6px;
+	background: var(--teckform-surface);
+	color: var(--teckform-text);
+	overflow: hidden;
+}
+
+.teckform-search__form:focus-within {
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+}
+
+.teckform-search__input {
+	flex: 1;
+	min-width: 0;
+	padding: 10px 14px;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	outline: none;
+}
+
+.teckform-search__overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+	background: rgba(17, 24, 39, 0.95);
+	text-align: start;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0s 0.3s;
+}
+
+.teckform-search.is-open .teckform-search__overlay {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.3s ease;
+}
+
+.teckform-search__overlay .teckform-search__form {
+	width: 100%;
+	max-width: 640px;
+	font-size: 20px;
+}
+
+.teckform-search__close {
+	position: absolute;
+	top: calc(20px + var(--wp-admin--admin-bar--height, 0px));
+	inset-inline-end: 20px;
+	color: #fff;
+	font-size: 40px;
+}
+
+/* Copyright */
+.teckform-copyright a {
+	color: inherit;
+	transition: color 0.2s ease;
 }

@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'TECKFORM_VERSION', '1.0.0' );
+define( 'TECKFORM_VERSION', '1.3.0' );
 
 if ( ! isset( $content_width ) ) {
 	$content_width = 1140;
@@ -47,8 +47,33 @@ add_action( 'after_setup_theme', 'teckform_setup' );
  */
 function teckform_enqueue_assets() {
 	wp_enqueue_style( 'teckform-style', get_stylesheet_uri(), array(), TECKFORM_VERSION );
+	wp_enqueue_script( 'teckform-theme', get_template_directory_uri() . '/assets/js/theme.js', array(), TECKFORM_VERSION, true );
 }
 add_action( 'wp_enqueue_scripts', 'teckform_enqueue_assets' );
+
+/**
+ * Theme options in Appearance > Customize > Teckform Options.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function teckform_customize_register( $wp_customize ) {
+	$wp_customize->add_section( 'teckform_options', array(
+		'title'    => __( 'Teckform Options', 'teckform' ),
+		'priority' => 30,
+	) );
+
+	$wp_customize->add_setting( 'teckform_back_to_top', array(
+		'default'           => true,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+
+	$wp_customize->add_control( 'teckform_back_to_top', array(
+		'label'   => __( 'Show "back to top" button', 'teckform' ),
+		'section' => 'teckform_options',
+		'type'    => 'checkbox',
+	) );
+}
+add_action( 'customize_register', 'teckform_customize_register' );
 
 /**
  * Let Elementor Pro's Theme Builder replace the header, footer and other locations.
@@ -104,4 +129,7 @@ function teckform_elementor_notice() {
 }
 add_action( 'admin_notices', 'teckform_elementor_notice' );
 
+require_once get_template_directory() . '/inc/dark-mode.php';
+require_once get_template_directory() . '/inc/templates.php';
 require_once get_template_directory() . '/inc/elementor/widgets.php';
+require_once get_template_directory() . '/inc/elementor/dark-mode-controls.php';

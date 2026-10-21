@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php wp_body_open(); ?>
 <a class="screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'teckform' ); ?></a>
 
-<?php if ( ! teckform_elementor_location( 'header' ) ) : ?>
+<?php if ( ! teckform_render_template( 'header' ) && ! teckform_elementor_location( 'header' ) ) : ?>
 <header class="site-header">
 	<div class="site-container">
 		<div class="site-branding">

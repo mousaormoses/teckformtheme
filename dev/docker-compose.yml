@@ -1,0 +1,53 @@
+# Local WordPress for developing and testing the Teckform theme.
+#   docker compose -f dev/docker-compose.yml up -d
+#   docker compose -f dev/docker-compose.yml run --rm cli sh /seed/setup.sh
+# Then open http://localhost:8080 (admin login details are in dev/setup.sh).
+
+name: teckform-dev
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+      MARIADB_ROOT_PASSWORD: wordpress
+    volumes:
+      - db:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:6.8-php8.2-apache
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: 1
+    volumes:
+      - wp:/var/www/html
+      - ..:/var/www/html/wp-content/themes/teckform
+
+  cli:
+    image: wordpress:cli-php8.2
+    profiles: ["cli"]
+    user: "33:33"
+    depends_on:
+      - db
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    volumes:
+      - wp:/var/www/html
+      - ..:/var/www/html/wp-content/themes/teckform
+      - .:/seed:ro
+
+volumes:
+  db:
+  wp:

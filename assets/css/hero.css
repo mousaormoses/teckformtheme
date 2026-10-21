@@ -1,0 +1,713 @@
+/* Teckform Hero widget. Colors and sizes set in the Style tab override these defaults. */
+
+.teckform-hero {
+	--teckform-hero-justify: center;
+	--teckform-hero-gap: 64px;
+	--teckform-hero-radius: 16px;
+	position: relative;
+	z-index: 0;
+	display: flex;
+	align-items: center;
+	padding: 96px 24px;
+	overflow: hidden;
+	color: var(--teckform-text);
+}
+
+.teckform-hero__inner {
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	max-width: var(--teckform-hero-width, 1140px);
+	margin: 0 auto;
+}
+
+.teckform-hero__content {
+	max-width: 760px;
+	margin-inline: auto;
+	text-align: center;
+}
+
+/* Badge */
+.teckform-hero__badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 24px;
+	padding: 4px 14px 4px 4px;
+	border: 1px solid var(--teckform-border);
+	border-radius: 999px;
+	background: var(--teckform-surface);
+	color: var(--teckform-text);
+	font-size: 14px;
+	line-height: 1.4;
+	text-decoration: none;
+	transition: border-color 0.2s ease;
+}
+
+.teckform-hero__badge:not(:has(.teckform-hero__badge-label)) {
+	padding-left: 14px;
+}
+
+a.teckform-hero__badge:hover {
+	border-color: var(--teckform-accent);
+}
+
+.teckform-hero__badge-label {
+	padding: 2px 10px;
+	border-radius: 999px;
+	background: var(--teckform-accent);
+	color: var(--teckform-on-accent, #fff);
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.teckform-hero__badge-arrow {
+	width: 16px;
+	height: 16px;
+	fill: currentColor;
+}
+
+/* Headline */
+.teckform-hero__title {
+	margin: 0 0 20px;
+	color: inherit;
+	font-size: clamp(2.25rem, 5vw, 4rem);
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+}
+
+.teckform-hero__highlight {
+	position: relative;
+	color: var(--teckform-hero-highlight, var(--teckform-accent));
+}
+
+.teckform-hero--highlight-underline .teckform-hero__highlight::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	bottom: -0.05em;
+	left: 0;
+	height: 0.12em;
+	border-radius: 999px;
+	background: currentColor;
+}
+
+.teckform-hero--highlight-marker .teckform-hero__highlight {
+	color: inherit;
+	background: linear-gradient(transparent 60%, color-mix(in srgb, var(--teckform-hero-highlight, var(--teckform-accent)) 35%, transparent) 60%);
+}
+
+/* Rotating words: all words share one grid cell; JS sizes the box to the visible word. */
+.teckform-hero__words {
+	display: inline-grid;
+	justify-items: start;
+	vertical-align: bottom;
+	transition: width 0.4s ease;
+}
+
+.teckform-hero__word {
+	grid-area: 1 / 1;
+	white-space: nowrap;
+	opacity: 0;
+	transform: translateY(0.5em);
+	transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.teckform-hero__word.is-active {
+	opacity: 1;
+	transform: none;
+}
+
+.teckform-hero__word.is-leaving {
+	opacity: 0;
+	transform: translateY(-0.5em);
+}
+
+.teckform-hero__typed::after {
+	content: "";
+	display: inline-block;
+	width: 0.06em;
+	height: 0.9em;
+	margin-left: 0.06em;
+	vertical-align: -0.05em;
+	background: currentColor;
+	animation: teckform-hero-caret 1s steps(1) infinite;
+}
+
+@keyframes teckform-hero-caret {
+	50% {
+		opacity: 0;
+	}
+}
+
+/* Description, benefits */
+.teckform-hero__description {
+	max-width: 620px;
+	margin: 0 0 32px;
+	margin-inline: inherit;
+	color: var(--teckform-muted);
+	font-size: 1.125rem;
+	line-height: 1.7;
+}
+
+.teckform-hero__benefits {
+	display: grid;
+	gap: 10px;
+	margin: -8px 0 32px;
+	padding: 0;
+	color: var(--teckform-muted);
+	list-style: none;
+}
+
+.teckform-hero__benefits li {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.teckform-hero__benefits svg {
+	flex: 0 0 auto;
+	width: 20px;
+	height: 20px;
+	margin-top: 2px;
+	padding: 2px;
+	border-radius: 50%;
+	background: color-mix(in srgb, var(--teckform-hero-check, #16a34a) 15%, transparent);
+	fill: var(--teckform-hero-check, #16a34a);
+}
+
+/* Buttons */
+.teckform-hero__buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: var(--teckform-hero-justify);
+	gap: 12px;
+}
+
+.teckform-hero__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 14px 26px;
+	border: 1px solid transparent;
+	border-radius: 10px;
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.2;
+	text-decoration: none;
+	transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.teckform-hero__button:hover {
+	transform: translateY(-1px);
+}
+
+.teckform-hero__button--primary {
+	border-color: var(--teckform-accent);
+	background: var(--teckform-accent);
+	color: var(--teckform-on-accent, #fff);
+}
+
+.teckform-hero__button--primary:hover {
+	background: color-mix(in srgb, var(--teckform-accent) 85%, #000);
+	color: var(--teckform-on-accent, #fff);
+}
+
+.teckform-hero__button--secondary {
+	border-color: var(--teckform-border);
+	background: transparent;
+	color: inherit;
+}
+
+.teckform-hero__button--secondary:hover {
+	border-color: currentColor;
+	color: inherit;
+}
+
+.teckform-hero__button-icon {
+	display: inline-flex;
+	transition: transform 0.2s ease;
+}
+
+.teckform-hero__button:hover .teckform-hero__button-icon {
+	transform: translateX(3px);
+}
+
+.teckform-hero__button-icon svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+/* Trust row */
+.teckform-hero__trust {
+	margin-top: 48px;
+	color: var(--teckform-muted);
+	font-size: 0.875rem;
+}
+
+.teckform-hero__trust-title {
+	margin: 0 0 16px;
+}
+
+.teckform-hero__logo-row {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: var(--teckform-hero-justify);
+	gap: 20px 40px;
+}
+
+.teckform-hero__logos img {
+	width: auto;
+	height: 28px;
+	object-fit: contain;
+}
+
+.teckform-hero__logo-placeholder {
+	padding: 6px 14px;
+	border: 1px dashed var(--teckform-border);
+	border-radius: 6px;
+	font-weight: 600;
+	opacity: 0.6;
+}
+
+.teckform-hero__avatars {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: var(--teckform-hero-justify);
+	gap: 14px;
+	margin-top: 32px;
+}
+
+.teckform-hero__avatar-row {
+	display: flex;
+}
+
+.teckform-hero__avatar-row img,
+.teckform-hero__avatar-row span {
+	width: 40px;
+	height: 40px;
+	border: 2px solid var(--teckform-bg);
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.teckform-hero__avatar-row > * + * {
+	margin-left: -12px;
+}
+
+.teckform-hero__avatar-row span {
+	background: var(--teckform-border);
+}
+
+.teckform-hero__avatar-row span:nth-child(2) {
+	background: #bfdbfe;
+}
+
+.teckform-hero__avatar-row span:nth-child(3) {
+	background: #a7f3d0;
+}
+
+.teckform-hero__avatar-row span:nth-child(4) {
+	background: #fecaca;
+}
+
+.teckform-hero__rating {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 8px;
+	text-align: start;
+}
+
+.teckform-hero__stars {
+	position: relative;
+	display: inline-block;
+	color: var(--teckform-border);
+	font-size: 1rem;
+	letter-spacing: 2px;
+	line-height: 1;
+}
+
+.teckform-hero__stars::before,
+.teckform-hero__stars-fill::before {
+	content: "\2605\2605\2605\2605\2605";
+}
+
+.teckform-hero__stars-fill {
+	position: absolute;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+	color: var(--teckform-hero-star, #f59e0b);
+	white-space: nowrap;
+}
+
+.teckform-hero__rating-value {
+	color: var(--teckform-text);
+}
+
+.teckform-hero__stats {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: var(--teckform-hero-justify);
+	gap: 24px 56px;
+}
+
+.teckform-hero__stat {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.teckform-hero__stat-value {
+	color: var(--teckform-text);
+	font-size: 2.25rem;
+	font-weight: 700;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Media (split and screenshot) */
+.teckform-hero__media {
+	width: 100%;
+}
+
+.teckform-hero__frame {
+	overflow: hidden;
+	border-radius: var(--teckform-hero-radius);
+	background: var(--teckform-surface);
+	box-shadow: 0 24px 60px -20px rgba(15, 23, 42, 0.35);
+}
+
+.teckform-hero__frame img,
+.teckform-hero__frame video {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.teckform-hero__frame--browser {
+	border: 1px solid var(--teckform-border);
+}
+
+.teckform-hero__frame-bar {
+	display: flex;
+	gap: 6px;
+	padding: 12px 14px;
+	border-bottom: 1px solid var(--teckform-border);
+}
+
+.teckform-hero__frame-bar span {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #ef4444;
+}
+
+.teckform-hero__frame-bar span:nth-child(2) {
+	background: #f59e0b;
+}
+
+.teckform-hero__frame-bar span:nth-child(3) {
+	background: #22c55e;
+}
+
+/* Split and split-with-form layouts */
+.teckform-hero--split .teckform-hero__inner,
+.teckform-hero--form .teckform-hero__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	align-items: center;
+	gap: var(--teckform-hero-gap);
+}
+
+.teckform-hero--split .teckform-hero__content,
+.teckform-hero--form .teckform-hero__content {
+	--teckform-hero-justify: flex-start;
+	max-width: none;
+	margin: 0;
+	text-align: left;
+}
+
+.teckform-hero--split .teckform-hero__media,
+.teckform-hero--form .teckform-hero__form {
+	justify-self: center;
+}
+
+.teckform-hero--media-left .teckform-hero__content {
+	order: 2;
+}
+
+/* Form card */
+.teckform-hero__form {
+	width: 100%;
+	max-width: 460px;
+	padding: 32px;
+	border: 1px solid var(--teckform-border);
+	border-radius: var(--teckform-hero-radius);
+	background: var(--teckform-surface);
+	box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.3);
+}
+
+.teckform-hero__form-title {
+	margin: 0 0 8px;
+	font-size: 1.375rem;
+}
+
+.teckform-hero__form-text {
+	margin: 0 0 20px;
+	color: var(--teckform-muted);
+}
+
+.teckform-hero__form-button {
+	width: 100%;
+}
+
+.teckform-hero__form input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]),
+.teckform-hero__form textarea,
+.teckform-hero__form select {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid var(--teckform-border);
+	border-radius: 8px;
+	background: var(--teckform-bg);
+	color: var(--teckform-text);
+	font: inherit;
+}
+
+.teckform-hero__form input[type="submit"],
+.teckform-hero__form button[type="submit"] {
+	width: 100%;
+	padding: 12px 20px;
+	border: 0;
+	border-radius: 10px;
+	background: var(--teckform-accent);
+	color: var(--teckform-on-accent, #fff);
+	font: inherit;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+/* Product screenshot layout */
+.teckform-hero--screenshot {
+	padding-bottom: 0;
+}
+
+.teckform-hero--screenshot .teckform-hero__media {
+	max-width: 1040px;
+	margin: var(--teckform-hero-gap) auto 0;
+}
+
+.teckform-hero--screenshot .teckform-hero__frame {
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+/* Animated headline layout */
+.teckform-hero--animated .teckform-hero__title {
+	font-size: clamp(2.5rem, 6vw, 4.75rem);
+}
+
+/* Full background layout */
+.teckform-hero--background {
+	min-height: 90vh;
+	padding-top: 140px;
+	color: #fff;
+}
+
+.teckform-hero--background .teckform-hero__highlight {
+	color: var(--teckform-hero-highlight, #93c5fd);
+}
+
+.teckform-hero--background .teckform-hero__description,
+.teckform-hero--background .teckform-hero__trust {
+	color: rgba(255, 255, 255, 0.85);
+}
+
+.teckform-hero--background .teckform-hero__badge {
+	border-color: rgba(255, 255, 255, 0.3);
+	background: rgba(255, 255, 255, 0.1);
+	color: #fff;
+}
+
+.teckform-hero--background .teckform-hero__button--secondary {
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.teckform-hero--background .teckform-hero__stat-value,
+.teckform-hero--background .teckform-hero__rating-value {
+	color: #fff;
+}
+
+.teckform-hero__background {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+}
+
+.teckform-hero__bg-image,
+.teckform-hero__bg-video {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.teckform-hero__overlay {
+	position: absolute;
+	inset: 0;
+	background: #0f172a;
+	opacity: 0.6;
+}
+
+.teckform-hero__scroll {
+	position: absolute;
+	bottom: 24px;
+	left: 50%;
+	z-index: 1;
+	display: flex;
+	padding: 6px;
+	border: 0;
+	background: none;
+	color: #fff;
+	cursor: pointer;
+	transform: translateX(-50%);
+	animation: teckform-hero-bounce 2s ease-in-out infinite;
+}
+
+.teckform-hero__scroll svg {
+	width: 32px;
+	height: 32px;
+	fill: currentColor;
+}
+
+@keyframes teckform-hero-bounce {
+	50% {
+		transform: translate(-50%, 8px);
+	}
+}
+
+/* Background patterns */
+.teckform-hero[class*="teckform-hero--pattern-"]::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+}
+
+.teckform-hero--pattern-grid::before {
+	background-image:
+		linear-gradient(var(--teckform-hero-pattern, var(--teckform-border)) 1px, transparent 1px),
+		linear-gradient(90deg, var(--teckform-hero-pattern, var(--teckform-border)) 1px, transparent 1px);
+	background-size: 56px 56px;
+	-webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+	mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+}
+
+.teckform-hero--pattern-dots::before {
+	background-image: radial-gradient(var(--teckform-hero-pattern, var(--teckform-border)) 1.5px, transparent 1.5px);
+	background-size: 24px 24px;
+	-webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+	mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 30%, transparent 100%);
+}
+
+.teckform-hero--pattern-glow::before {
+	background:
+		radial-gradient(40% 50% at 20% 20%, color-mix(in srgb, var(--teckform-hero-pattern, var(--teckform-accent)) 22%, transparent), transparent),
+		radial-gradient(35% 45% at 85% 30%, color-mix(in srgb, var(--teckform-hero-pattern, #a855f7) 18%, transparent), transparent);
+}
+
+/* Entrance animation */
+.teckform-hero--animate .teckform-hero__content > *,
+.teckform-hero--animate .teckform-hero__media,
+.teckform-hero--animate .teckform-hero__form {
+	animation: teckform-hero-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.teckform-hero--animate .teckform-hero__content > :nth-child(2) {
+	animation-delay: 0.08s;
+}
+
+.teckform-hero--animate .teckform-hero__content > :nth-child(3) {
+	animation-delay: 0.16s;
+}
+
+.teckform-hero--animate .teckform-hero__content > :nth-child(4) {
+	animation-delay: 0.24s;
+}
+
+.teckform-hero--animate .teckform-hero__content > :nth-child(n + 5) {
+	animation-delay: 0.32s;
+}
+
+.teckform-hero--animate .teckform-hero__media,
+.teckform-hero--animate .teckform-hero__form {
+	animation-delay: 0.3s;
+}
+
+@keyframes teckform-hero-in {
+	from {
+		opacity: 0;
+		transform: translateY(24px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.teckform-hero *,
+	.teckform-hero *::before,
+	.teckform-hero *::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+/* Tablet and phone: split layouts stack, text first */
+@media (max-width: 1024px) {
+	.teckform-hero {
+		--teckform-hero-gap: 48px;
+		padding: 72px 20px;
+	}
+
+	.teckform-hero--split .teckform-hero__inner,
+	.teckform-hero--form .teckform-hero__inner {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.teckform-hero--media-left .teckform-hero__content {
+		order: 0;
+	}
+
+	.teckform-hero--screenshot {
+		padding-bottom: 0;
+	}
+
+	.teckform-hero--background {
+		padding-top: 120px;
+	}
+}
+
+@media (max-width: 767px) {
+	.teckform-hero__description {
+		font-size: 1rem;
+	}
+
+	.teckform-hero__buttons {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.teckform-hero__stats {
+		gap: 20px 32px;
+	}
+
+	.teckform-hero__stat-value {
+		font-size: 1.75rem;
+	}
+}
